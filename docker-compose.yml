@@ -4,7 +4,7 @@ services:
         image: mysql:5.7.22
         container_name: phpstart-mysql
         environment:
-            - MYSQL_DATABASE=curriculos
+            - MYSQL_DATABASE=curriculoIncit
             - MYSQL_USER=admin
             - MYSQL_PASSWORD=admin
             - MYSQL_ROOT_PASSWORD=root
@@ -41,7 +41,7 @@ services:
         container_name: phpstart
         environment:
             - DB_HOST=mysql
-            - DB_NAME=curriculos
+            - DB_NAME=curriculoIncit
             - DB_USER=admin
             - DB_PASS=admin
             - BEANSTALK_HOST=beanstalk

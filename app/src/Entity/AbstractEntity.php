@@ -2,6 +2,8 @@
 
 namespace IntecPhp\Entity;
 
+use IntecPhp\Service\DbHandler;
+
 abstract class AbstractEntity
 {
 
