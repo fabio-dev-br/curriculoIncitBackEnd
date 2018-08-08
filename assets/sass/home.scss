@@ -1,0 +1,30 @@
+@import "../../node_modules/bootstrap/scss/functions";
+
+@import 'theme/variables';
+
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/utilities";
+
+.welcome-section {
+    background: url('/img/bison.jpg') center / cover;
+    background-color: rgba(#000, 0.7);
+}
+
+@include media-breakpoint-up(xs) {
+    .welcome-section {
+        min-height: 300px;
+    }
+}
+
+@include media-breakpoint-up(sm) {
+    .welcome-section {
+        min-height: 400px;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .welcome-section {
+        min-height: 550px;
+    }
+}

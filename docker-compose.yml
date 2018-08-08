@@ -1,0 +1,68 @@
+version: '3.1'
+services:
+    mysql:
+        image: mysql:5.7.22
+        container_name: phpstart-mysql
+        environment:
+            - MYSQL_DATABASE=curriculos
+            - MYSQL_USER=admin
+            - MYSQL_PASSWORD=admin
+            - MYSQL_ROOT_PASSWORD=root
+        volumes:
+            - .:/srv/vhosts/phpApp
+            - ./.docker/mysql/mysql-data:/var/lib/mysql
+        working_dir: /srv/vhosts/phpApp
+        ports:
+            - 13306:3306
+
+    beanstalk:
+        image: schickling/beanstalkd
+        container_name: phpstart-beanstalk
+        ports:
+            - 21300:11300
+
+    node:
+        image: node:10.6.0-alpine
+        container_name: phpstart-node
+        environment:
+            - SERVERNAME=webserver
+        volumes:
+            - .:/srv/vhosts/phpApp
+        working_dir: /srv/vhosts/phpApp
+        command: /bin/sh -c "npm install grunt-cli && npm install && npm run dev"
+        ports:
+            - 3000:3000
+            - 3001:3001
+        depends_on:
+            - webserver
+
+    php-fpm:
+        image: marciodojr/phpstart:2.0.0
+        container_name: phpstart
+        environment:
+            - DB_HOST=mysql
+            - DB_NAME=curriculos
+            - DB_USER=admin
+            - DB_PASS=admin
+            - BEANSTALK_HOST=beanstalk
+            - APP_SECRET=holly_molly!
+            - APP_COOKIE_NAME=auth_token
+        working_dir: /srv/vhosts/phpApp
+        volumes:
+            - .:/srv/vhosts/phpApp
+            - ./.docker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+        depends_on:
+            - mysql
+            - beanstalk
+
+    webserver:
+        image: nginx:1.14.0-alpine
+        container_name: phpstart-webserver
+        working_dir: /srv/vhosts/phpApp
+        volumes:
+            - .:/srv/vhosts/phpApp
+            - ./.docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+        ports:
+            - 2999:80
+        depends_on:
+            - php-fpm
