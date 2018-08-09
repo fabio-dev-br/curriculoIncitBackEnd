@@ -1,3 +1,5 @@
+-- Patch para criar a database curriculoIncit e criar as tabelas modeladas do banco de dados
+
 create database curriculoIncit;
 
 use curriculoIncit;

@@ -151,8 +151,8 @@ $dependencies[HttpMiddleware::class] = function ($c) {
 // ----------------------------------------- Entity
 
 $dependencies[User::class] = function($c) {
-    $dbHandler = $c[DbHandler::class];
-    return new User($dbHandler);
+    $conn = $c[DbHandler::class];
+    return new User($conn);
 };
 
 // ----------------------------------------- /Entity

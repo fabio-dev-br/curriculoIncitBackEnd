@@ -10,55 +10,56 @@ use PDOException;
  *
  * @author intec
  */
+
 class DbHandler
 {
     private $conn;
-
+    // Construtor privado: só a própria classe pode invocá-lo
     public function __construct(PDO $conn)
     {
         $this->conn = $conn;
     }
-
     public function beginTransaction()
     {
         return $this->conn->beginTransaction();
     }
-
     public function commit()
     {
         return $this->conn->commit();
     }
-
-    public function query($sql)
+    public function query($queryString, $params = [])
     {
         try {
-            return $this->conn->query($sql);
-        } catch (PDOException $e) {
-            if ($this->conn->inTransaction()) {
+            $sth = $this->conn->prepare($queryString);
+            $sth->execute($params);
+            return $sth;
+        } catch(PDOException $e) {
+            if($this->conn->inTransaction()) {
                 $this->conn->rollBack();
             }
             error_log($e->getMessage());
         }
     }
-
     public function prepare($queryString, array $params)
     {
         try {
             $sth = $this->conn->prepare($queryString);
             $sth->execute($params);
             return $sth;
-        } catch (PDOException $e) {
-            if ($this->conn->inTransaction()) {
+        } catch(PDOException $e) {
+            if($this->conn->inTransaction()) {
                 $this->conn->rollBack();
             }
             error_log($e->getMessage());
         }
     }
-
+    public function lastInsertId()
+    {
+        return $this->conn->lastInsertId();
+    }
     private function __clone()
     {
     }
-
     private function __wakeup()
     {
     }
