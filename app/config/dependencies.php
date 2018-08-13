@@ -29,6 +29,7 @@ use IntecPhp\View\Layout;
 // Entity
     //Uses digitados para a nova aplicação
 use IntecPhp\Entity\User;
+use IntecPhp\Entity\RequestPassword;
 
 // Controller
     //Uses digitados para a nova aplicação
@@ -83,7 +84,8 @@ $dependencies[Contact::class] = function ($c) {
 
 $dependencies[Access::class] = function ($c) {
     $user = $c[User::class];
-    return new Access($user);
+    $requestPass = $c[RequestPassword::class];
+    return new Access($user, $requestPass);
 };
 
 // ----------------------------------------- /Model
@@ -153,6 +155,11 @@ $dependencies[HttpMiddleware::class] = function ($c) {
 $dependencies[User::class] = function($c) {
     $conn = $c[DbHandler::class];
     return new User($conn);
+};
+
+$dependencies[RequestPassword::class] = function($c) {
+    $conn = $c[DbHandler::class];
+    return new RequestPassword($conn);
 };
 
 // ----------------------------------------- /Entity

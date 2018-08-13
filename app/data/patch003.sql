@@ -16,7 +16,7 @@ create table user(
 create table request_password(
     id int(11) not null auto_increment primary key,
     id_user int(11),
-    hash varchar(30),
+    hash varchar(32),
     exp_date datetime,
     foreign key(id_user) references user(id)
 );
