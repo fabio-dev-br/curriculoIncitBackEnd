@@ -9,6 +9,7 @@ use IntecPhp\Model\Account;
 use IntecPhp\Model\Contact;
     //Uses digitados para a nova aplicação
 use IntecPhp\Model\Access;
+use IntecPhp\Model\System;
 
 // Middleware
 use IntecPhp\Middleware\AuthenticationMiddleware;
@@ -28,8 +29,10 @@ use IntecPhp\View\Layout;
 
 // Entity
     //Uses digitados para a nova aplicação
-use IntecPhp\Entity\User;
+use IntecPhp\Entity\Curriculum;
 use IntecPhp\Entity\RequestPassword;
+use IntecPhp\Entity\User;
+use IntecPhp\Entity\UserHability;
 
 // Controller
     //Uses digitados para a nova aplicação
@@ -88,6 +91,13 @@ $dependencies[Access::class] = function ($c) {
     return new Access($user, $requestPass);
 };
 
+$dependencies[System::class] = function ($c) {
+    $curriculum = $c[Curriculum::class];
+    $user = $c[User::class];
+    $userHability = $c[UserHability::class];
+    return new System($curriculum, $user, $userHability);
+};
+
 // ----------------------------------------- /Model
 
 // ----------------------------------------- Service
@@ -129,7 +139,8 @@ $dependencies[ContactController::class] = function($c) {
 
 $dependencies[UserController::class] = function($c) {
     $access = $c[Access::class];
-    return new UserController($access);
+    $system = $c[System::class];
+    return new UserController($access, $system);
 };
 
 // ----------------------------------------- /Controller
@@ -152,14 +163,24 @@ $dependencies[HttpMiddleware::class] = function ($c) {
 
 // ----------------------------------------- Entity
 
-$dependencies[User::class] = function($c) {
+$dependencies[Curriculum::class] = function($c) {
     $conn = $c[DbHandler::class];
-    return new User($conn);
+    return new Curriculum($conn);
 };
 
 $dependencies[RequestPassword::class] = function($c) {
     $conn = $c[DbHandler::class];
     return new RequestPassword($conn);
+};
+
+$dependencies[User::class] = function($c) {
+    $conn = $c[DbHandler::class];
+    return new User($conn);
+};
+
+$dependencies[UserHability::class] = function($c) {
+    $conn = $c[DbHandler::class];
+    return new UserHability($conn);
 };
 
 // ----------------------------------------- /Entity

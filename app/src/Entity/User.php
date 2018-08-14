@@ -65,4 +65,13 @@ class User extends AbstractEntity
         
         return false;
     }
+
+    // Função que atualiza a senha na tabela user
+    public function updatePass($userId, $newPass)
+    {
+        $stm = $this->conn->query("update user set password = ? where id = ?", [
+            $newPass,
+            $userId
+        ]);
+    }
 }

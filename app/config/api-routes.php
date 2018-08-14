@@ -26,5 +26,13 @@ return [
     [
         'pattern' => '/forgetMyPass',
         'callback' => Controller\UserController::class . ':forgetMyPass',
+    ],
+    [
+        'pattern' => '/changeMyPass',
+        'callback' => Controller\UserController::class . ':changeMyPass',
+    ],
+    [
+        'pattern' => '/addCurriculum',
+        'callback' => Controller\UserController::class . ':addCurriculum',
     ]
 ];
