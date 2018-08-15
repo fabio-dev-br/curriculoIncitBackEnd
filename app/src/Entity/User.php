@@ -11,6 +11,7 @@ class User extends AbstractEntity
     // Variáveis herdadas da classe pai e sobrescritas para permitir a utilização correta das funções da classe abstrata 
     // Nome da tabela
     protected $name = 'user';
+    
     // Id
     protected $id = 'id';
 
@@ -73,5 +74,11 @@ class User extends AbstractEntity
             $newPass,
             $userId
         ]);
+
+        // Caso a query tenha ocorrido perfeitamente retorna true
+        if($stm) {
+            return true;
+        }
+        return false;
     }
 }

@@ -30,6 +30,7 @@ use IntecPhp\View\Layout;
 // Entity
     //Uses digitados para a nova aplicação
 use IntecPhp\Entity\Curriculum;
+use IntecPhp\Entity\Interest;
 use IntecPhp\Entity\RequestPassword;
 use IntecPhp\Entity\User;
 use IntecPhp\Entity\UserHability;
@@ -95,7 +96,8 @@ $dependencies[System::class] = function ($c) {
     $curriculum = $c[Curriculum::class];
     $user = $c[User::class];
     $userHability = $c[UserHability::class];
-    return new System($curriculum, $user, $userHability);
+    $interest = $c[Interest::class];
+    return new System($curriculum, $user, $userHability, $interest);
 };
 
 // ----------------------------------------- /Model
@@ -166,6 +168,11 @@ $dependencies[HttpMiddleware::class] = function ($c) {
 $dependencies[Curriculum::class] = function($c) {
     $conn = $c[DbHandler::class];
     return new Curriculum($conn);
+};
+
+$dependencies[Interest::class] = function($c) {
+    $conn = $c[DbHandler::class];
+    return new Interest($conn);
 };
 
 $dependencies[RequestPassword::class] = function($c) {

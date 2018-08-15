@@ -8,6 +8,7 @@ class Curriculum extends AbstractEntity
     // Variáveis herdadas da classe pai e sobrescritas para permitir a utilização correta das funções da classe abstrata 
     // Nome da tabela
     protected $name = 'curriculum';
+    
     // Id
     protected $id = 'id';
 
@@ -18,7 +19,21 @@ class Curriculum extends AbstractEntity
         if($stm) {
             $curriculum =  $stm->fetch();
             if($curriculum) {
-                return $curriculum['id_user'];
+                return $curriculum['id'];
+            }
+        }
+        return false;
+    }
+
+    // Função que recupera todas as variáveis da linha a partir do ID do usuário, em caso de sucesso retorna o vetor com as variáveis
+    // , caso contrário, retorna false
+    public function getAllVars($userId)
+    {
+        $stm = $this->conn->query("select * from curriculum where id_user = ?", [$userId]);
+        if($stm) {
+            $curriculum =  $stm->fetch();
+            if($curriculum) {
+                return $curriculum;
             }
         }
         return false;
@@ -43,6 +58,43 @@ class Curriculum extends AbstractEntity
         // Caso a query tenha ocorrido perfeitamente o ID do usuário inserido é retornado à classe Access
         if($stm) {
             return $this->conn->lastInsertId();
+        }
+        return false;
+    }
+
+    // Função que atualiza o currículo na tabela
+    public function update($area, $course, $idFile, $regDate, $regUp, $institute, $graduateYear, $userId)
+    {
+        $stm = $this->conn->query("update curriculum set area = ?, course = ?, id_file = ?, reg_date = ?, reg_up = ?, institute = ?, graduate_year = ? where id_user = ?" , [
+                $area, 
+                $course, 
+                $idFile, 
+                $regDate, 
+                $regUp, 
+                $institute, 
+                $graduateYear, 
+                $userId
+            ]
+        );
+
+        // Caso a query tenha ocorrido perfeitamente retorna true
+        if($stm) {
+            return true;
+        }
+        return false;
+    }
+
+    // Função que "remove" o currículo da tabela -> Explicação das aspas no remove no arquivo Model/System.php
+    public function delete($id)
+    {
+        $stm = $this->conn->query("update curriculum set id_file = NULL where id = ?" , [
+                $id
+            ]
+        );
+
+        // Caso a query tenha ocorrido perfeitamente retorna true
+        if($stm) {
+            return true;
         }
         return false;
     }

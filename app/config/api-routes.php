@@ -10,6 +10,8 @@ use IntecPhp\Middleware\AuthenticationMiddleware;
 //  -   Criar nova conta;
 //  -   Logar na plataforma;
 //  -   Trocar a senha, pelo esqueci minha senha;
+//  -   Adicionar novo currículo de usuário comum;
+//  -   Adicionar novo interesse de empresa;
 return [
     [
         'pattern' => '/contact',
@@ -34,5 +36,21 @@ return [
     [
         'pattern' => '/addCurriculum',
         'callback' => Controller\UserController::class . ':addCurriculum',
+    ],
+    [
+        'pattern' => '/addInterests',
+        'callback' => Controller\UserController::class . ':addInterests',
+    ],
+    [
+        'pattern' => '/deleteInterest',
+        'callback' => Controller\UserController::class . ':deleteInterest',
+    ],
+    [
+        'pattern' => '/updateCurriculum',
+        'callback' => Controller\UserController::class . ':updateCurriculum',
+    ],
+    [
+        'pattern' => '/removeCurriculum',
+        'callback' => Controller\UserController::class . ':removeCurriculum',
     ]
 ];

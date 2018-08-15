@@ -82,7 +82,7 @@ class UserController
         $rp->printJson();
     }
 
-    // Função na Controller para adicionar um novo currículo de usuário
+    // Função na Controller para adicionar um novo currículo de usuário comum
     public function addCurriculum($request)
     {
         $params = $request->getPostParams();
@@ -107,4 +107,78 @@ class UserController
 
         $rp->printJson();
     }
+
+    // Função na Controller para adicionar novos interesses da empresa
+    public function addInterests($request)
+    {
+        $params = $request->getPostParams();
+        
+        try {
+            if(!$params['interests']) {
+                throw new Exception('Não foram passados interesses');
+            }
+            $this->system->addInterests(
+                $params['interests'],
+                $params['id_user']
+            );
+            $rp = new ResponseHandler(200);
+        } catch (Exception $ex) {
+            $rp = new ResponseHandler(400, $ex->getMessage());
+        }
+
+        $rp->printJson();
+    }
+
+    // Função na Controller para remover um interesse de uma empresa
+    public function deleteInterest($request)
+    {
+        $params = $request->getPostParams();
+        
+        try {
+            $this->system->deleteInterest(
+                $params['interest'],
+                $params['id_user']
+            );
+            $rp = new ResponseHandler(200);
+        } catch (Exception $ex) {
+            $rp = new ResponseHandler(400, $ex->getMessage());
+        }
+
+        $rp->printJson();
+    }
+
+    // Função na Controller para atualizar o arquivo de currículo do usuário comum
+    public function updateCurriculum($request)
+    {
+        $params = $request->getPostParams();
+        
+        try {
+            $this->system->updateCurriculum(
+                $params['id_user'],
+                $params['id_file']
+            );
+            $rp = new ResponseHandler(200);
+        } catch (Exception $ex) {
+            $rp = new ResponseHandler(400, $ex->getMessage());
+        }
+
+        $rp->printJson();
+    }
+
+    // Função na Controller para "remover" o currículo do usuário comum -> Explicação das aspas no remove no arquivo Model/System.php
+    public function removeCurriculum($request)
+    {
+        $params = $request->getPostParams();
+        
+        try {
+            $this->system->removeCurriculum(
+                $params['id_user']
+            );
+            $rp = new ResponseHandler(200);
+        } catch (Exception $ex) {
+            $rp = new ResponseHandler(400, $ex->getMessage());
+        }
+
+        $rp->printJson();
+    }    
 }

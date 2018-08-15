@@ -7,6 +7,7 @@ abstract class AbstractEntity
 {
     // Variável para manipulação do banco de dados
     protected $conn;
+    
     // Variáveis sobrescritas nas classes filhas para utilização da função get e getAll
     protected $name;
     protected $id;

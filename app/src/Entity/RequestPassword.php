@@ -10,6 +10,7 @@ class RequestPassword extends AbstractEntity
 {
     // Variáveis herdadas da classe pai e sobrescritas para permitir a utilização correta das funções da classe abstrata 
     // Nome da tabela
+    
     protected $name = 'request_password';
     // Id
     protected $id = 'id';
@@ -90,6 +91,7 @@ class RequestPassword extends AbstractEntity
             ]);
             $id = $stm->fetch();
             $id = $id['id'];
+
             // Caso a query tenha ocorrido perfeitamente o id do request é retornado à classe Access
             if($id) {
                 return $id;
