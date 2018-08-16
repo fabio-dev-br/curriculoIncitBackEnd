@@ -38,6 +38,7 @@ use IntecPhp\Entity\UserHability;
 // Controller
     //Uses digitados para a nova aplicação
 use IntecPhp\Controller\UserController;
+use IntecPhp\Controller\CurriculumController;
 
 // ----------------------------------------- Base
 
@@ -141,8 +142,12 @@ $dependencies[ContactController::class] = function($c) {
 
 $dependencies[UserController::class] = function($c) {
     $access = $c[Access::class];
+    return new UserController($access);
+};
+
+$dependencies[CurriculumController::class] = function($c) {
     $system = $c[System::class];
-    return new UserController($access, $system);
+    return new CurriculumController($system);
 };
 
 // ----------------------------------------- /Controller

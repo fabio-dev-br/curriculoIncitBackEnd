@@ -7,17 +7,15 @@ use IntecPhp\Model\Contact;
 use IntecPhp\Model\ResponseHandler;
 use Exception;
 
-//  Classe UserController é um Controller responsável por tratar do cadastro de um novo usuário, o login, a recuperação de senha e adição de currículo
-//  está diretamente ligado com as classes model Access e System 
+//  Classe UserController é um Controller responsável por tratar do cadastro de um novo usuário, o login, a recuperação de senha 
+//  , adição/remoção de currículo do usuário comum, atualização do arquivo do currículo do usuário comum, adcionar/remover interesses da empresa, está diretamente ligado com as classes model Access e System 
 class UserController
 {
     private $access;
-    private $system;
 
-    public function __construct($access, $system)
+    public function __construct($access)
     {
         $this->access = $access;
-        $this->system = $system;
     }
 
     // Função na Controller para criar uma nova conta
@@ -81,104 +79,4 @@ class UserController
 
         $rp->printJson();
     }
-
-    // Função na Controller para adicionar um novo currículo de usuário comum
-    public function addCurriculum($request)
-    {
-        $params = $request->getPostParams();
-        
-        try {
-            if(!$params['habilities']) {
-                throw new Exception('Não foram passadas habilidades');
-            }
-            $this->system->addCurriculum(
-                $params['area'], 
-                $params['course'], 
-                $params['id_file'], 
-                $params['institute'], 
-                $params['graduate_year'], 
-                $params['id_user'],
-                $params['habilities']
-            );
-            $rp = new ResponseHandler(200);
-        } catch (Exception $ex) {
-            $rp = new ResponseHandler(400, $ex->getMessage());
-        }
-
-        $rp->printJson();
-    }
-
-    // Função na Controller para adicionar novos interesses da empresa
-    public function addInterests($request)
-    {
-        $params = $request->getPostParams();
-        
-        try {
-            if(!$params['interests']) {
-                throw new Exception('Não foram passados interesses');
-            }
-            $this->system->addInterests(
-                $params['interests'],
-                $params['id_user']
-            );
-            $rp = new ResponseHandler(200);
-        } catch (Exception $ex) {
-            $rp = new ResponseHandler(400, $ex->getMessage());
-        }
-
-        $rp->printJson();
-    }
-
-    // Função na Controller para remover um interesse de uma empresa
-    public function deleteInterest($request)
-    {
-        $params = $request->getPostParams();
-        
-        try {
-            $this->system->deleteInterest(
-                $params['interest'],
-                $params['id_user']
-            );
-            $rp = new ResponseHandler(200);
-        } catch (Exception $ex) {
-            $rp = new ResponseHandler(400, $ex->getMessage());
-        }
-
-        $rp->printJson();
-    }
-
-    // Função na Controller para atualizar o arquivo de currículo do usuário comum
-    public function updateCurriculum($request)
-    {
-        $params = $request->getPostParams();
-        
-        try {
-            $this->system->updateCurriculum(
-                $params['id_user'],
-                $params['id_file']
-            );
-            $rp = new ResponseHandler(200);
-        } catch (Exception $ex) {
-            $rp = new ResponseHandler(400, $ex->getMessage());
-        }
-
-        $rp->printJson();
-    }
-
-    // Função na Controller para "remover" o currículo do usuário comum -> Explicação das aspas no remove no arquivo Model/System.php
-    public function removeCurriculum($request)
-    {
-        $params = $request->getPostParams();
-        
-        try {
-            $this->system->removeCurriculum(
-                $params['id_user']
-            );
-            $rp = new ResponseHandler(200);
-        } catch (Exception $ex) {
-            $rp = new ResponseHandler(400, $ex->getMessage());
-        }
-
-        $rp->printJson();
-    }    
 }

@@ -14,7 +14,7 @@ class UserHability extends AbstractEntity
 
     // Função que verifica a quais currículos uma habilidade está ligada, em caso de sucesso retorna um lista contendo 
     // todos os IDs dos currículos, caso contrário, retorna false
-    public function getCurriculaById($hability)
+    public function getCurriculaByHab($hability)
     {
         $stm = $this->conn->query("select id_curriculum from user_hability where hability = ?", [$hability]);
         if($stm) {
@@ -71,7 +71,7 @@ class UserHability extends AbstractEntity
     public function delete($hability, $curriculumId)
     {
         $stm = $this->conn->query("delete from user_hability where hability = ? and id_curriculum = ?" , [
-                $id,
+                $hability,
                 $curriculumId
             ]
         );

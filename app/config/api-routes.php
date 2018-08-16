@@ -12,6 +12,10 @@ use IntecPhp\Middleware\AuthenticationMiddleware;
 //  -   Trocar a senha, pelo esqueci minha senha;
 //  -   Adicionar novo currículo de usuário comum;
 //  -   Adicionar novo interesse de empresa;
+//  -   Remover interesse de empresa;
+//  -   Atualizar arquivo de currículo;
+//  -   Remover currículo de usuário comum;
+//  -   Buscar por meio de uma lista de interesses;
 return [
     [
         'pattern' => '/contact',
@@ -35,22 +39,26 @@ return [
     ],
     [
         'pattern' => '/addCurriculum',
-        'callback' => Controller\UserController::class . ':addCurriculum',
+        'callback' => Controller\CurriculumController::class . ':addCurriculum',
     ],
     [
         'pattern' => '/addInterests',
-        'callback' => Controller\UserController::class . ':addInterests',
+        'callback' => Controller\CurriculumController::class . ':addInterests',
     ],
     [
         'pattern' => '/deleteInterest',
-        'callback' => Controller\UserController::class . ':deleteInterest',
+        'callback' => Controller\CurriculumController::class . ':deleteInterest',
     ],
     [
         'pattern' => '/updateCurriculum',
-        'callback' => Controller\UserController::class . ':updateCurriculum',
+        'callback' => Controller\CurriculumController::class . ':updateCurriculum',
     ],
     [
         'pattern' => '/removeCurriculum',
-        'callback' => Controller\UserController::class . ':removeCurriculum',
+        'callback' => Controller\CurriculumController::class . ':removeCurriculum',
+    ],
+    [
+        'pattern' => '/searchCurByInt',
+        'callback' => Controller\CurriculumController::class . ':searchCurByInt',
     ]
 ];

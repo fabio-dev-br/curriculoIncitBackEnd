@@ -116,11 +116,33 @@ class System
 
         // Recupera as habilidades do usuário ligados ao currículo
         $habilities = $this->userHability->getHabilitiesByCurriculum($idCurriculum);
+
         // Cada habilidade relacionada ao currículo é removida da tabela
         foreach ($habilities as $hability) {
             if(!$this->userHability->delete($hability, $idCurriculum)) {
                 throw new Exception('Não foi possivel fazer a remoção da habilidade do usuário');
             }
+        }  
+    }
+
+    // Função na Model para buscar os currículos ligados à uma lista de interesses fornecidos pelo usuário empresa
+    public function searchCurByInt($interests)
+    {
+        // Para cada interesse são recuperados todos os currículos relacionados à cada um
+        // 1º São obtidos os id_curriculum da tabela user_hability se as habilidades do usuário são iguais aos interesses buscados
+        // 2º Os currículos são obtidos a partir dos id_curriculum
+        foreach ($interests as $interest) {
+            $idCurricula[$interest] = $this->userHability->getCurriculaByHab($interest);
+            if(!$idCurricula) {
+                throw new Exception('Não há usuários com as habilidades desejadas');
+            }
+
+            // A variável curricula é limpa já que é utilizada mais de uma vez no loop
+            $curricula = NULL;
+            foreach ($idCurricula[$interest] as $idCurriculum) {
+                $curricula[] = $this->curriculum->get($idCurriculum); 
+            }
+            $result[$interest] = $curricula;
         }  
     }
 }
