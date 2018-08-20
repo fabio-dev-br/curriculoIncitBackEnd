@@ -44,4 +44,28 @@ class Interest extends AbstractEntity
         }
         return false;
     }
+
+    // Função que retorna os interesses na presentes na tabela interest, em caso de sucesso retorna interests, caso contrário, retorna false
+    public function getInterests($userId)
+    {
+        $stm = $this->conn->query("select interest from interest where id_user = ?", [
+                $userId
+            ]
+        );
+        if($stm) {
+            // Variável stms recebe todas as linhas encontradas na tabela interest com o ID de usuário fornecido
+            $stms = $stm->fetchAll();
+
+            // O vetor interests receberá todos os interesses da empresa
+            foreach ($stms as $interest) {
+                $interests[] = $interest['interest'];
+            }
+            // Caso haja interesses é retornado o vetor interests, caso contrário, retorna-se false
+            if($interests) {
+                return $interests;
+            }
+            return false;
+        }
+        return false;
+    }    
 }

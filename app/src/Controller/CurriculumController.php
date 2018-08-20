@@ -8,7 +8,8 @@ use IntecPhp\Model\ResponseHandler;
 use Exception;
 
 //  Classe CurriculumController é um Controller responsável por adição/remoção de currículo do usuário comum, 
-//  atualização do arquivo do currículo do usuário comum, adicionar/remover interesses da empresa, está diretamente ligado com a classe model System 
+//  atualização do arquivo do currículo do usuário comum, adicionar/remover interesses da empresa, 
+//  está diretamente ligado com a classe model System 
 class CurriculumController
 {
 
@@ -19,7 +20,7 @@ class CurriculumController
         $this->system = $system;
     }
 
-    // Função na Controller para adicionar um novo currículo de usuário comum
+    // Função na Controller para adicionar um novo currículo do usuário comum
     public function addCurriculum($request)
     {
         $params = $request->getPostParams();
@@ -125,14 +126,31 @@ class CurriculumController
         $params = $request->getPostParams();
         
         try {
-            $this->system->searchCurByInt(
+            $result = $this->system->searchCurByInt(
                 $params['interests']
             );
-            $rp = new ResponseHandler(200);
+            $rp = new ResponseHandler(200, '', $result);
         } catch (Exception $ex) {
             $rp = new ResponseHandler(400, $ex->getMessage());
         }
 
         $rp->printJson();
-    }   
+    }  
+    
+    // Função na Controller para buscar os currículos ligados à todos os interesses de um usuário empresa
+    public function searchCurByAllInt($request)
+    {
+        $params = $request->getPostParams();
+        
+        try {
+            $result = $this->system->searchCurByAllInt(
+                $params['id_user']
+            );
+            $rp = new ResponseHandler(200, '', $result);
+        } catch (Exception $ex) {
+            $rp = new ResponseHandler(400, $ex->getMessage());
+        }
+
+        $rp->printJson();
+    }
 }

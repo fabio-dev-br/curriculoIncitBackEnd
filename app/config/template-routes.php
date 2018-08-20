@@ -3,6 +3,16 @@
 namespace IntecPhp;
 
 return [
+    // [
+    //     'pattern' => '/',
+    //     'callback' => function() {
+    //         $layout = new View\Layout();
+    //         $layout
+    //             ->addStylesheet('/css/home.min.css')
+    //             ->addScript('/js/home.min.js')
+    //             ->render('home/index');
+    //     }
+    // ],
     [
         'pattern' => '/',
         'callback' => function() {
@@ -10,7 +20,7 @@ return [
             $layout
                 ->addStylesheet('/css/home.min.css')
                 ->addScript('/js/home.min.js')
-                ->render('home/index');
+                ->render('homeCurriculo/index');
         }
     ],
 ];

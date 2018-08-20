@@ -131,6 +131,7 @@ class System
         // Para cada interesse são recuperados todos os currículos relacionados à cada um
         // 1º São obtidos os id_curriculum da tabela user_hability se as habilidades do usuário são iguais aos interesses buscados
         // 2º Os currículos são obtidos a partir dos id_curriculum
+        // 3º Os currículos encontrados são anexados à variável result de acordo com o interesse atual
         foreach ($interests as $interest) {
             $idCurricula[$interest] = $this->userHability->getCurriculaByHab($interest);
             if(!$idCurricula) {
@@ -144,5 +145,31 @@ class System
             }
             $result[$interest] = $curricula;
         }  
+        return $result;
+    }
+
+    // Função na Model para buscar os currículos ligados à todos os interesses de um usuário empresa
+    public function searchCurByAllInt($userId)
+    {
+        // A partir do ID do usuário empresa são encontrados os interesses dela
+        $interests = $this->interestEntity->getInterests($userId);
+        // Para cada interesse são recuperados todos os currículos relacionados à cada um
+        // 1º São obtidos os id_curriculum da tabela user_hability se as habilidades do usuário são iguais aos interesses buscados
+        // 2º Os currículos são obtidos a partir dos id_curriculum
+        // 3º Os currículos encontrados são anexados à variável result de acordo com o interesse atual
+        foreach ($interests as $interest) {
+            $idCurricula[$interest] = $this->userHability->getCurriculaByHab($interest);
+            if(!$idCurricula) {
+                throw new Exception('Não há usuários com as habilidades desejadas');
+            }
+
+            // A variável curricula é limpa já que é utilizada mais de uma vez no loop
+            $curricula = NULL;
+            foreach ($idCurricula[$interest] as $idCurriculum) {
+                $curricula[] = $this->curriculum->get($idCurriculum); 
+            }
+            $result[$interest] = $curricula;
+        }  
+        return $result;
     }
 }
