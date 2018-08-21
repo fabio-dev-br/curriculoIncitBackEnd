@@ -15,7 +15,7 @@
     <body>
         <header>
             <nav class="navbar navbar-expand-sm navbar navbar-dark bg-dark position-fixed fixed-top">
-                <a class="navbar-brand" href="#">PhpStart</a>
+                <a class="navbar-brand" href="#">CurriculoIncit</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -32,6 +32,9 @@
                         </li>
                     </ul>
                 </div>
+                <a href="#" type="button" class="btn btn-default navbar-btn pull-right">
+                    <span class="glyphicon glyphicon-home"></span>Login
+                </a>
             </nav>
         </header>
         <main>
@@ -40,7 +43,7 @@
 
         <footer class="bg-dark border-top border-white pt-3 pb-5">
             <div class="container">
-                <p class="text-white small">© 2018 - Incluir Tecnologia LTDA ME.</p>
+                <p class="text-white small">© 2018 - ViDenadai </p>
             </div>
         </footer>
 

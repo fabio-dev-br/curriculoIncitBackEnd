@@ -19,7 +19,7 @@ return [
             $layout = new View\Layout();
             $layout
                 ->addStylesheet('/css/home.min.css')
-                ->addScript('/js/home.min.js')
+                ->addScript('/js/homeCurriculo.min.js')
                 ->render('homeCurriculo/index');
         }
     ],
