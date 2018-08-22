@@ -26,7 +26,7 @@ return [
         'callback' => Controller\UserController::class . ':newAccount',
     ],
     [
-        'pattern' => '/login',
+        'pattern' => '/login2',
         'callback' => Controller\UserController::class . ':login',
     ],
     [

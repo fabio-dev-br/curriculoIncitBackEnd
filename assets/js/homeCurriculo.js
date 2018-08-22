@@ -1,5 +1,5 @@
 // Instância para tratar do modal que abrange o cadastro da empresa na plataforma
-const companyForm = new Vue({
+const companyModal = new Vue({
     el: '#companyModal',
     data: {
         name: '',
@@ -37,7 +37,7 @@ const companyForm = new Vue({
 
 
 // Instância para tratar do modal que abrange o cadastro da pessoa na plataforma
-const personForm = new Vue({
+const personModal = new Vue({
     el: '#personModal',
     data: {
         name: '',

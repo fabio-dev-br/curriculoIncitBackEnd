@@ -24,17 +24,8 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="#">Início</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Features</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Pricing</a>
-                        </li>
                     </ul>
                 </div>
-                <a href="/login" type="button" class="btn btn-outline-dark my-2 my-sm-0">
-                    Login
-                </a>
             </nav>
         </header>
         <main>
