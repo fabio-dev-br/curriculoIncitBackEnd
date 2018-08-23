@@ -24,7 +24,13 @@ class UserController
         $params = $request->getPostParams();
         
         try {
-            $this->access->newAccount($params['name'], $params['email'], $params['identity'], $params['user_type'], $params['password']);
+            $this->access->newAccount(
+                $params['name'], 
+                $params['email'], 
+                $params['identity'], 
+                $params['user_type'], 
+                $params['password']
+            );
             $rp = new ResponseHandler(200);
         } catch (Exception $ex) {
             $rp = new ResponseHandler(400, $ex->getMessage());
@@ -33,14 +39,17 @@ class UserController
         $rp->printJson();
     }
 
-    // Função na Controller para logar na plataforma
+    // Função na Controller para logar na plataforma, a variável result recebe o tipo e o id de usuário e repassa para o front-end em caso de sucesso
     public function login($request)
     {
         $params = $request->getPostParams();
         
         try {
-            $this->access->login($params['email'], $params['password']);
-            $rp = new ResponseHandler(200);
+            $result = $this->access->login(
+                $params['email'], 
+                $params['password']
+            );
+            $rp = new ResponseHandler(200, '', $result);
         } catch (Exception $ex) {
             $rp = new ResponseHandler(400, $ex->getMessage());
         }
@@ -55,7 +64,9 @@ class UserController
         $params = $request->getPostParams();
         
         try {
-            $this->access->forgetMyPass($params['email']);
+            $this->access->forgetMyPass(
+                $params['email']
+            );
             $rp = new ResponseHandler(200);
         } catch (Exception $ex) {
             $rp = new ResponseHandler(400, $ex->getMessage());
@@ -71,7 +82,11 @@ class UserController
         $params = $request->getPostParams();
         
         try {
-            $this->access->changeMyPass($params['hash'], $params['email'], $params['newPass']);
+            $this->access->changeMyPass(
+                $params['hash'], 
+                $params['email'], 
+                $params['newPass']
+            );
             $rp = new ResponseHandler(200);
         } catch (Exception $ex) {
             $rp = new ResponseHandler(400, $ex->getMessage());

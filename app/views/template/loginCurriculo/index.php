@@ -1,13 +1,12 @@
 <section class="pt-5 pb-3">
+    <!-- Divisão do login -->
     <div id="login">
     <h3 class="text-center font-weight-bold pt-5 py-3">Login</h3>
+        <p class="text-center text-danger" v-if="error">{{ error }}</p>
         <div class="container" id="login-container">
             <div class="row justify-content-center align-items-center" id="login-row">
                 <div class="card">
                     <div class="card-body">
-
-                        <!-- Formulário de login -->
-                        <form class="p-3" id="loginForm" v-on:submit="sendInfo()">
 
                             <!-- E-mail -->
                             <div class="form-group">
@@ -42,13 +41,12 @@
                                 <a href="">Esqueceu a senha?</a>                                
                             </div>                                                            
 
-                            <!-- Botão de login -->
+                            <!-- Botão de login - ao clicar chama a função no loginCurriculo.js para fazer o login -->
                             <div class="d-flex flex-column align-items-center mt-4 my-2">
-                                <button  type="submit" class="btn btn-outline-dark my-2">
+                                <button @click="sendInfo()" class="btn btn-outline-dark my-2">
                                     Fazer login
                                 </button>                            
                             </div>
-                        </form>
                     </div>
                 </div>
             </div>

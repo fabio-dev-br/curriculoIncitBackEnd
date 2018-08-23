@@ -49,10 +49,12 @@ class Access
         // Gera o hash para comparar com o existente na tabela de usuário
         $hash = md5($password);     
 
-        // Verifica se o usuário e a senha coincidem, em caso de sucesso retorna true, caso contrário, uma exceção é lançada
-        if(!$this->user->login($email, $hash)) {
+        // Verifica se o usuário e a senha coincidem, em caso de sucesso retorna o tipo e o id do usuário, caso contrário, uma exceção é lançada
+        $info = $this->user->login($email, $hash);
+        if(!$info) {
             throw new Exception('Senha incorreta. Tente novamente ou clique em esqueci a senha');
         }
+        return $info;
     }
 
     // 1ª Função na Model para recuperar a senha (Responsável por tratar a inserção na tabela request_password, ou seja, a parte que

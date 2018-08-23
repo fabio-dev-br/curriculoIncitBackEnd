@@ -15,7 +15,7 @@
     <body>
         <header>
             <nav class="navbar navbar-expand-sm navbar navbar-dark bg-dark position-fixed fixed-top">
-                <a class="navbar-brand" href="#">CurriculoIncit</a>
+                <a class="navbar-brand" href="/">CurriculoIncit</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -32,9 +32,22 @@
                         </li>
                     </ul>
                 </div>
-                <a href="/login" type="button" class="btn btn-outline-dark my-2 my-sm-0">
-                    Login
-                </a>
+
+                <!-- Verificar a possibilidade de usar o mesmo layout para login e home (rever linhas 38 a 49) -->
+
+                <!-- <template v-if="seen" id="loginButton"> -->
+                    <div id="loginButton" >
+                            <a href='/login' type="button" 
+                                class="btn btn-outline-dark my-2 my-sm-0"                                            
+                                v-on:click="avisa()">
+                                Login
+                            </a>
+                        <p v-if="show">
+                            
+                        </p>
+                    </div>
+                <!-- </template> -->
+
             </nav>
         </header>
         <main>

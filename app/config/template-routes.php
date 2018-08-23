@@ -3,16 +3,6 @@
 namespace IntecPhp;
 
 return [
-    // [
-    //     'pattern' => '/',
-    //     'callback' => function() {
-    //         $layout = new View\Layout();
-    //         $layout
-    //             ->addStylesheet('/css/home.min.css')
-    //             ->addScript('/js/home.min.js')
-    //             ->render('home/index');
-    //     }
-    // ],
     [
         'pattern' => '/',
         'callback' => function() {
@@ -33,4 +23,24 @@ return [
                 ->render('loginCurriculo/index');
         }
     ],
+    [
+        'pattern' => '/portalPessoa',
+        'callback' => function() {
+            $layout = new View\Layout('layout-login');
+            $layout
+                ->addStylesheet('/css/home.min.css')
+                //->addScript('/js/loginCurriculo.min.js')
+                ->render('portalPessoaCurriculo/index');
+        }
+    ],
+    [
+        'pattern' => '/portalEmpresa',
+        'callback' => function() {
+            $layout = new View\Layout('layout-login');
+            $layout
+                ->addStylesheet('/css/home.min.css')
+                //->addScript('/js/loginCurriculo.min.js')
+                ->render('portalEmpresaCurriculo/index');
+        }
+    ]
 ];
