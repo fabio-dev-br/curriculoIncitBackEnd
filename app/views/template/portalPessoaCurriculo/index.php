@@ -19,7 +19,7 @@
 <!-- Modal do cadastro de currículo -->
 <div class="modal fade" id="curriculumFields" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content" id="companyModal">
+        <div class="modal-content" id="curriculumModal">
         
             <!-- Modal Header -->
             <div class="modal-header">
@@ -33,7 +33,7 @@
             <div class="modal-body" >
 
                 <!-- Formulário de currículo, contém: área, curso, arquivo, instituto, ano de formação, id de usuário e habilidades-->
-                <form>
+                <form id="curriculumForm">
 
                     <!-- Área -->
                     <div class="form-group">
@@ -63,7 +63,8 @@
                         <label for="curriculumFile"> Arquivo de currículo </label>
                         <input type="file" class="form-control-file"
                             id="curriculumFile"
-                            v-model="file" required>
+                            v-on:change="onFileSelected"
+                            required> 
                     </div>
 
                     <!-- Instituição de ensino -->
@@ -81,7 +82,20 @@
                         <input type="text" class="form-control bg-transparent"
                             id="curriculumGradYear"        
                             v-model="graduateYear"
-                            placeholder="Digite o instituto de formação... *" required>
+                            placeholder="yyyy *" required>
+                    </div>
+
+                    <!-- Habilidades -->
+                    <div class="form-group">
+                        <!-- <label for="curriculumHabilities"> Principais habilidades </label>
+                        <tags-input element-id="tags"
+                            v-model="selectedTags"
+                            :existing-tags="{ 
+                                'web-development': 'Web Development',
+                                'php': 'PHP',
+                                'javascript': 'JavaScript',
+                            }"
+                            :typeahead="true"></tags-input> -->
                     </div>
                 </form>
             </div>
@@ -92,7 +106,7 @@
                     data-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" 
                     data-dismiss="modal" 
-                    v-on:click="user_type = 0 , sendInfo()"
+                    v-on:click="sendInfo()"
                     >Enviar</button>
             </div>
         </div>

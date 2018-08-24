@@ -27,7 +27,10 @@ const companyModal = new Vue({
             });
         },
         isValid() {
-            return this.name && this.email && this.identity && this.password;
+            return  this.name && 
+                    this.email && 
+                    this.identity && 
+                    this.password;
         }
     },
     computed: {
@@ -65,7 +68,10 @@ const personModal = new Vue({
             });
         },
         isValid() {
-            return this.name && this.email && this.identity && this.password;
+            return  this.name && 
+                    this.email && 
+                    this.identity && 
+                    this.password;
         }
     },
     computed: {

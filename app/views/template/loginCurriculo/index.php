@@ -1,7 +1,7 @@
 <section class="pt-5 pb-3">
     <!-- Divisão do login -->
     <div id="login">
-    <h3 class="text-center font-weight-bold pt-5 py-3">Login</h3>
+        <h3 class="text-center font-weight-bold pt-5 py-3">Login</h3>
         <p class="text-center text-danger" v-if="error">{{ error }}</p>
         <div class="container" id="login-container">
             <div class="row justify-content-center align-items-center" id="login-row">

@@ -29,7 +29,7 @@ return [
             $layout = new View\Layout('layout-login');
             $layout
                 ->addStylesheet('/css/home.min.css')
-                //->addScript('/js/loginCurriculo.min.js')
+                ->addScript('/js/portalPessoaCurriculo.min.js')
                 ->render('portalPessoaCurriculo/index');
         }
     ],

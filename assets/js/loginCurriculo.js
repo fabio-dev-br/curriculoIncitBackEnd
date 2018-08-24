@@ -23,8 +23,6 @@ const login = new Vue({
                 // Se o login ocorreu corretamente o r['code'] é igual a 200
                 // lembrar que quando for fazer o tratamento de sessão ele ocorrerá no back-end
                 if(r['code'] == 200) {
-                    
-                    //header('/portalEmpresa');
 
                     // Verifica se o usuário é empresa (user_type = 0) ou pessoa (user_type = 1)
                     // e redireciona para o local certo
@@ -37,6 +35,7 @@ const login = new Vue({
                 
             }, err => {
                 console.log(err.responseJSON);
+                
                 // Se o login não ocorreu corretamente o err.responseJSON['code'] é igual a 400
                 if(err.responseJSON['code'] == 400) {
                     this.error = err.responseJSON['message'];
@@ -44,7 +43,8 @@ const login = new Vue({
             });
         },
         isValid() {
-            return this.email && this.password;
+            return  this.email && 
+                    this.password;
         }
     },
     computed: {
