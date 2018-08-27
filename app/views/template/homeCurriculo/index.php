@@ -163,7 +163,6 @@
                         <p class="help-block text-danger"></p>
                         <small class="form-text text-muted" id="passwordHelp"> A senha deve possuir no mínimo  </small>
                     </div>
-                    <input type="hidden" v-model="user_type" value="1">
                 </form>
             </div>
             
