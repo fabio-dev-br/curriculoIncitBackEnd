@@ -22,6 +22,7 @@ include './vendor/autoload.php';
 
 use Intec\Router\SimpleRouter;
 use IntecPhp\Middleware\HttpMiddleware;
+use IntecPhp\Middleware\AllowOriginMiddleware;
 use Pimple\Psr11\Container;
 use Pimple\Container as PimpleContainer;
 
@@ -29,6 +30,7 @@ SimpleRouter::setRoutes(require 'app/config/routes.php');
 
 SimpleRouter::setNotFoundFallback(HttpMiddleware::class . ':pageNotFound');
 SimpleRouter::setErrorFallback(HttpMiddleware::class . ':fatalError');
+SimpleRouter::setErrorFallback(AllowOriginMiddleware::class . ':process');
 
 $dependencies = new PimpleContainer();
 $dependencies['settings'] = $settings;
