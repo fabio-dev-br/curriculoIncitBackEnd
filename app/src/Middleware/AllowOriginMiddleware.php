@@ -1,6 +1,8 @@
 <?php
 namespace IntecPhp\Middleware;
 
+// Middleware para permitir que os recursos da resposta possam ser
+// ser compartilhados com a origem dada
 class AllowOriginMiddleware
 {
     public function process()

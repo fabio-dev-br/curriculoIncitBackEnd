@@ -3,45 +3,32 @@
 namespace IntecPhp\Model;
 
 use IntecPhp\Service\JwtWrapper;
-use IntecPhp\Service\Cookie;
 use Exception;
 
 class Account
 {
     private $jwt;
-    private $sessionCookie;
 
-    public function __construct(JwtWrapper $jwt, Cookie $sessionCookie)
+    public function __construct(JwtWrapper $jwt)
     {
         $this->jwt = $jwt;
-        $this->sessionCookie = $sessionCookie;
     }
 
     public function login(array $info)
     {
-        $token = $this->jwt->encode($info);
-        return [
-            'name' => $this->sessionCookie->getName(),
-            'value' => $this->sessionCookie->set($token)
-        ];
+        return $this->jwt->encode($info);
     }
 
-    public function isLoggedIn()
+    public function get(string $token, string $key = null)
     {
         try {
-            $token = $this->sessionCookie->get();
-            if (!$token) {
-                throw new Exception('Usuário não logado');
+            $data = $this->jwt->decode($token)->data;
+            if(is_null($key)) {
+                return $data;
             }
-            return $this->jwt->decode($token);
+            return property_exists($data, $key) ? $data->$key : false;
         } catch (Exception $e) {
+            return false;
         }
-
-        return false;
-    }
-
-    public function logout()
-    {
-        $this->sessionCookie->remove();
     }
 }

@@ -18,7 +18,6 @@ use IntecPhp\Controller\ContactController;
 
 // Service
 use IntecPhp\Service\DbHandler;
-use IntecPhp\Service\Cookie;
 use IntecPhp\Service\JwtWrapper;
 
 // Worker
@@ -78,8 +77,7 @@ $dependencies[Pheanstalk::class] = function ($c) {
 
 $dependencies[Account::class] = function ($c) {
     $jwt = $c[JwtWrapper::class];
-    $sessionCookie = $c[Cookie::class];
-    return new Account($jwt, $sessionCookie);
+    return new Account($jwt);
 };
 
 $dependencies[Contact::class] = function ($c) {
@@ -110,10 +108,6 @@ $dependencies[DbHandler::class] = function ($c) {
     return new DbHandler($pdo);
 };
 
-$dependencies[Cookie::class] = function ($c) {
-    $cookieSettings = $c['settings']['session'];
-    return new Cookie($cookieSettings['cookie_name'], $cookieSettings['cookie_expires']);
-};
 $dependencies[JwtWrapper::class] = function ($c) {
     $jwtSettings = $c['settings']['jwt'];
     return new JwtWrapper($jwtSettings['app_secret'], $jwtSettings['token_expires']);
@@ -142,7 +136,8 @@ $dependencies[ContactController::class] = function($c) {
 
 $dependencies[UserController::class] = function($c) {
     $access = $c[Access::class];
-    return new UserController($access);
+    $account = $c[Account::class];
+    return new UserController($access, $account);
 };
 
 $dependencies[CurriculumController::class] = function($c) {

@@ -1,5 +1,3 @@
-// const VoerroTagsInput = require('@voerro/vue-tagsinput');
-
 // Instância para tratar do formulário para inserir currículo na plataforma
 const curriculumForm = new Vue({
     el: '#curriculumModal',

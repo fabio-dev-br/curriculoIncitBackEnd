@@ -46,7 +46,6 @@ services:
             - DB_PASS=admin
             - BEANSTALK_HOST=beanstalk
             - APP_SECRET=holly_molly!
-            - APP_COOKIE_NAME=auth_token
         working_dir: /srv/vhosts/phpApp
         volumes:
             - .:/srv/vhosts/phpApp

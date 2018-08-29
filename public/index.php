@@ -28,9 +28,12 @@ use Pimple\Container as PimpleContainer;
 
 SimpleRouter::setRoutes(require 'app/config/routes.php');
 
+
+SimpleRouter::setDefaultMiddlewares([
+    AllowOriginMiddleware::class . ':process'
+]);
 SimpleRouter::setNotFoundFallback(HttpMiddleware::class . ':pageNotFound');
 SimpleRouter::setErrorFallback(HttpMiddleware::class . ':fatalError');
-SimpleRouter::setErrorFallback(AllowOriginMiddleware::class . ':process');
 
 $dependencies = new PimpleContainer();
 $dependencies['settings'] = $settings;

@@ -4,6 +4,7 @@ namespace IntecPhp\Controller;
 
 use Pheanstalk\Pheanstalk;
 use IntecPhp\Model\Contact;
+use IntecPhp\Model\Account;
 use IntecPhp\Model\ResponseHandler;
 use Exception;
 
@@ -12,10 +13,12 @@ use Exception;
 class UserController
 {
     private $access;
+    private $account;
 
-    public function __construct($access)
+    public function __construct($access, Account $account)
     {
         $this->access = $access;
+        $this->account = $account;
     }
 
     // Função na Controller para criar uma nova conta
@@ -49,7 +52,12 @@ class UserController
                 $params['email'], 
                 $params['password']
             );
-            $rp = new ResponseHandler(200, '', $result);
+
+            $token = $this->account->login($result);
+            $rp = new ResponseHandler(200, '', [
+                'token' => $token,
+                'user_type' => $result['user_type']
+            ]);
         } catch (Exception $ex) {
             $rp = new ResponseHandler(400, $ex->getMessage());
         }
