@@ -42,4 +42,5 @@ return [
             'default_bcc' => false,
         ]
     ],
+    'curriculumPath' => 'public/curriculos'
 ];

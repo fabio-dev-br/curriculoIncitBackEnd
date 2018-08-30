@@ -142,7 +142,8 @@ $dependencies[UserController::class] = function($c) {
 
 $dependencies[CurriculumController::class] = function($c) {
     $system = $c[System::class];
-    return new CurriculumController($system);
+    $account = $c[Account::class];
+    return new CurriculumController($system, $account);
 };
 
 // ----------------------------------------- /Controller

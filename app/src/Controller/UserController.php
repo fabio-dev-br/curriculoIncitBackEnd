@@ -5,17 +5,18 @@ namespace IntecPhp\Controller;
 use Pheanstalk\Pheanstalk;
 use IntecPhp\Model\Contact;
 use IntecPhp\Model\Account;
+use IntecPhp\Model\Access;
 use IntecPhp\Model\ResponseHandler;
 use Exception;
 
-//  Classe UserController é um Controller responsável por tratar do cadastro de um novo usuário, o login, a recuperação de senha 
-//  , adição/remoção de currículo do usuário comum, atualização do arquivo do currículo do usuário comum, adcionar/remover interesses da empresa, está diretamente ligado com as classes model Access e System 
+//  Classe UserController é um Controller responsável por tratar do cadastro de um novo usuário, o login, a recuperação de senha,
+//  está diretamente ligado com as classes model Access e Account 
 class UserController
 {
     private $access;
     private $account;
 
-    public function __construct($access, Account $account)
+    public function __construct(Access $access, Account $account)
     {
         $this->access = $access;
         $this->account = $account;

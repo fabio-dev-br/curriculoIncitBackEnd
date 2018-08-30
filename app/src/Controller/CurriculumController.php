@@ -3,47 +3,64 @@
 namespace IntecPhp\Controller;
 
 use Pheanstalk\Pheanstalk;
+use IntecPhp\Model\Account;
 use IntecPhp\Model\Contact;
+use IntecPhp\Model\System;
 use IntecPhp\Model\ResponseHandler;
 use Exception;
 
 //  Classe CurriculumController é um Controller responsável por adição/remoção de currículo do usuário comum, 
 //  atualização do arquivo do currículo do usuário comum, adicionar/remover interesses da empresa, 
-//  está diretamente ligado com a classe model System 
+//  está diretamente ligado com as classes model System e Account 
 class CurriculumController
 {
 
+    private $account;
     private $system;
 
-    public function __construct($system)
+    public function __construct(System $system, Account $account)
     {
-        $this->system = $system;
+        $this->account = $account;
+        $this->system = $system;        
     }
 
     // Função na Controller para adicionar um novo currículo do usuário comum
     public function addCurriculum($request)
     {
-        $params = $request->getPostParams();
-        
-        try {
-            if(!$params['habilities']) {
-                throw new Exception('Não foram passadas habilidades');
-            }
-            $this->system->addCurriculum(
-                $params['area'], 
-                $params['course'], 
-                $params['id_file'], 
-                $params['institute'], 
-                $params['graduate_year'], 
-                $params['id_user'],
-                $params['habilities']
-            );
-            $rp = new ResponseHandler(200);
-        } catch (Exception $ex) {
-            $rp = new ResponseHandler(400, $ex->getMessage());
-        }
+        // Pega o token do header Authorization
+        $token = $_SERVER["HTTP_AUTHORIZATION"];
 
-        $rp->printJson();
+        // Recupera o id do usuário contido no token
+        $id_user = $this->account->get($token, "id");
+
+        // Recupera os parâmetros vindos pelo POST
+        $params = $request->getPostParams();
+
+        // Recupera o arquivo de currículo
+        $files = $request->getFilesParams();
+
+        // Tratamento do arquivo
+        var_dump($files);
+
+        // try {
+        //     if(!$params['habilities']) {
+        //         throw new Exception('Não foram passadas habilidades');
+        //     }
+        //     $this->system->addCurriculum(
+        //         $params['area'], 
+        //         $params['course'], 
+        //         $params['id_file'], 
+        //         $params['institute'], 
+        //         $params['graduate_year'], 
+        //         $id_user,
+        //         $params['habilities']
+        //     );
+        //     $rp = new ResponseHandler(200);
+        // } catch (Exception $ex) {
+        //     $rp = new ResponseHandler(400, $ex->getMessage());
+        // }
+
+        // $rp->printJson();
     }
 
     // Função na Controller para adicionar novos interesses da empresa
