@@ -28,7 +28,7 @@ class Access
         }
         
         // Gera um hash para inserir a senha na tabela de usuário
-        $hash = md5($password);
+        $hash = password_hash($password, PASSWORD_DEFAULT);
 
         // Insere o usuário na tabela, em caso de sucesso retorna o id do novo usuário, caso contrário, uma exceção é lançada
         $userId = $this->user->insert($name, $email, $identity, $user_type, $hash);
@@ -45,14 +45,19 @@ class Access
         if(!$userId) {
             throw new Exception('Não existe um usuário com esse e-mail');
         }
+        // Recupera o hash existente na tabela a partir do email
+        $hashFromTable = $this->user->getHash($email);
 
-        // Gera o hash para comparar com o existente na tabela de usuário
-        $hash = md5($password);     
-
-        // Verifica se o usuário e a senha coincidem, em caso de sucesso retorna o tipo e o id do usuário, caso contrário, uma exceção é lançada
-        $info = $this->user->login($email, $hash);
-        if(!$info) {
+        // Compara a senha fornecida com o hash existente na tabela de usuário
+        // em caso de fracasso, uma exceção é lançada
+        if(!password_verify($password, $hashFromTable)) {
             throw new Exception('Senha incorreta. Tente novamente ou clique em esqueci a senha');
+        }
+
+        // Em caso de sucesso recupera o tipo do usuário e o id a partir do e-mail, caso contrário, uma exceção é lançada
+        $info = $this->user->getInfo($email);
+        if(!$info) {
+            throw new Exception('O login não ocorreu adequadamente');
         }
         return $info;
     }

@@ -10,6 +10,7 @@ use IntecPhp\Model\Contact;
     //Uses digitados para a nova aplicação
 use IntecPhp\Model\Access;
 use IntecPhp\Model\System;
+use IntecPhp\Model\FileHandler;
 
 // Middleware
 use IntecPhp\Middleware\AuthenticationMiddleware;
@@ -99,6 +100,11 @@ $dependencies[System::class] = function ($c) {
     return new System($curriculum, $user, $userHability, $interest);
 };
 
+$dependencies[FileHandler::class] = function($c) {
+    $path = $c['settings']['curriculumPath'];
+    return new FileHandler($path);
+};
+
 // ----------------------------------------- /Model
 
 // ----------------------------------------- Service
@@ -143,7 +149,8 @@ $dependencies[UserController::class] = function($c) {
 $dependencies[CurriculumController::class] = function($c) {
     $system = $c[System::class];
     $account = $c[Account::class];
-    return new CurriculumController($system, $account);
+    $fileHandler = $c[FileHandler::class];
+    return new CurriculumController($system, $account, $fileHandler);
 };
 
 // ----------------------------------------- /Controller

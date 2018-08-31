@@ -49,15 +49,28 @@ class User extends AbstractEntity
 
         return false;
     }
-
-    // Função que faz o login do usuário, em caso de sucesso (usuário e senha coincidem) retorna true, caso contrário, retorna false
-    public function login($email, $password)
+    // Função que recupera o hash da senha a partir do e-mail
+    public function getHash($email)
     {
-        $stm = $this->conn->query("select user_type, id from user where email = ? and password = ?", [
-            $email,  
-            $password
+        $stm = $this->conn->query("select password from user where email = ?", [
+            $email
         ]);
-        // Caso a query tenha ocorrido perfeitamente (e-mail e senha coincidem) o tipo e o id do usuário são retornados à classe Access
+        // Caso a query tenha ocorrido perfeitamente o password é retornado à classe Access
+        $hash = $stm->fetch();
+        if($hash) {    
+            return $hash['password'];
+        }
+        
+        return false;
+    }
+
+    // Função que ajuda no login do usuário, em caso de sucesso retorna tipo de usuário e id, caso contrário, retorna false
+    public function getInfo($email)
+    {
+        $stm = $this->conn->query("select user_type, id from user where email = ?", [
+            $email
+        ]);
+        // Caso a query tenha ocorrido perfeitamente o tipo e o id do usuário são retornados à classe Access
         $info = $stm->fetch();
         if($info) {    
             return $info;

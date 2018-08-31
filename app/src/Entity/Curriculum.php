@@ -40,13 +40,13 @@ class Curriculum extends AbstractEntity
     }
 
     // Função que insere o currículo na tabela, em caso de sucesso retorna o ID do currículo novo, caso contrário, retorna false
-    public function insert($area, $course, $idFile, $regDate, $regUp, $institute, $graduateYear, $userId)
+    public function insert($area, $course, $hashFile, $regDate, $regUp, $institute, $graduateYear, $userId)
     {
-        $stm = $this->conn->query("insert into curriculum (area, course, id_file, reg_date, reg_up, institute, graduate_year, id_user) 
+        $stm = $this->conn->query("insert into curriculum (area, course, hash_file, reg_date, reg_up, institute, graduate_year, id_user) 
             values (?, ?, ?, ?, ?, ?, ?, ?)", [
                 $area, 
                 $course, 
-                $idFile, 
+                $hashFile, 
                 $regDate, 
                 $regUp, 
                 $institute, 
@@ -63,12 +63,12 @@ class Curriculum extends AbstractEntity
     }
 
     // Função que atualiza o currículo na tabela
-    public function update($area, $course, $idFile, $regDate, $regUp, $institute, $graduateYear, $userId)
+    public function update($area, $course, $hashFile, $regDate, $regUp, $institute, $graduateYear, $userId)
     {
-        $stm = $this->conn->query("update curriculum set area = ?, course = ?, id_file = ?, reg_date = ?, reg_up = ?, institute = ?, graduate_year = ? where id_user = ?" , [
+        $stm = $this->conn->query("update curriculum set area = ?, course = ?, hash_file = ?, reg_date = ?, reg_up = ?, institute = ?, graduate_year = ? where id_user = ?" , [
                 $area, 
                 $course, 
-                $idFile, 
+                $hashFile, 
                 $regDate, 
                 $regUp, 
                 $institute, 

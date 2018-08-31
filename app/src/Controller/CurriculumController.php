@@ -5,6 +5,7 @@ namespace IntecPhp\Controller;
 use Pheanstalk\Pheanstalk;
 use IntecPhp\Model\Account;
 use IntecPhp\Model\Contact;
+use IntecPhp\Model\FileHandler;
 use IntecPhp\Model\System;
 use IntecPhp\Model\ResponseHandler;
 use Exception;
@@ -18,10 +19,11 @@ class CurriculumController
     private $account;
     private $system;
 
-    public function __construct(System $system, Account $account)
+    public function __construct(System $system, Account $account, FileHandler $fileHandler)
     {
         $this->account = $account;
         $this->system = $system;        
+        $this->fileHandler = $fileHandler;
     }
 
     // Função na Controller para adicionar um novo currículo do usuário comum
@@ -39,33 +41,43 @@ class CurriculumController
         // Recupera o arquivo de currículo
         $files = $request->getFilesParams();
 
-        // Tratamento do arquivo
-        var_dump($files);
+        // ****** Tratamento do arquivo ******
+        // O arquivo de currículo proveniente do front é movido para a pasta public/curriculos
+        // se ocorreu normalmente, o hash do arquivo é retornado 
+        // caso algo dê errado uma exceção é lançada
+        $hashFile = $this->fileHandler->moveFile($files['file']['tmp_name']);
+            
+        try {
+            if(!$params['habilities']) {
+                throw new Exception('Não foram passadas habilidades');
+            }
+            $this->system->addCurriculum(
+                $params['area'], 
+                $params['course'], 
+                $hashFile, 
+                $params['institute'], 
+                $params['graduate_year'], 
+                $id_user,
+                $params['habilities']
+            );
+            $rp = new ResponseHandler(200);
+        } catch (Exception $ex) {
+            $rp = new ResponseHandler(400, $ex->getMessage());
+        }
 
-        // try {
-        //     if(!$params['habilities']) {
-        //         throw new Exception('Não foram passadas habilidades');
-        //     }
-        //     $this->system->addCurriculum(
-        //         $params['area'], 
-        //         $params['course'], 
-        //         $params['id_file'], 
-        //         $params['institute'], 
-        //         $params['graduate_year'], 
-        //         $id_user,
-        //         $params['habilities']
-        //     );
-        //     $rp = new ResponseHandler(200);
-        // } catch (Exception $ex) {
-        //     $rp = new ResponseHandler(400, $ex->getMessage());
-        // }
-
-        // $rp->printJson();
+        $rp->printJson();
     }
 
     // Função na Controller para adicionar novos interesses da empresa
     public function addInterests($request)
     {
+        // Pega o token do header Authorization
+        $token = $_SERVER["HTTP_AUTHORIZATION"];
+
+        // Recupera o id do usuário contido no token
+        $id_user = $this->account->get($token, "id");
+
+        // Recupera os parâmetros vindos pelo POST
         $params = $request->getPostParams();
         
         try {
@@ -74,7 +86,7 @@ class CurriculumController
             }
             $this->system->addInterests(
                 $params['interests'],
-                $params['id_user']
+                $id_user
             );
             $rp = new ResponseHandler(200);
         } catch (Exception $ex) {
@@ -87,12 +99,19 @@ class CurriculumController
     // Função na Controller para remover um interesse de uma empresa
     public function deleteInterest($request)
     {
+        // Pega o token do header Authorization
+        $token = $_SERVER["HTTP_AUTHORIZATION"];
+
+        // Recupera o id do usuário contido no token
+        $id_user = $this->account->get($token, "id");
+
+        // Recupera os parâmetros vindos pelo POST
         $params = $request->getPostParams();
         
         try {
             $this->system->deleteInterest(
                 $params['interest'],
-                $params['id_user']
+                $id_user
             );
             $rp = new ResponseHandler(200);
         } catch (Exception $ex) {
@@ -105,12 +124,19 @@ class CurriculumController
     // Função na Controller para atualizar o arquivo de currículo do usuário comum
     public function updateCurriculum($request)
     {
+        // Pega o token do header Authorization
+        $token = $_SERVER["HTTP_AUTHORIZATION"];
+
+        // Recupera o id do usuário contido no token
+        $id_user = $this->account->get($token, "id");
+
+        // Recupera os parâmetros vindos pelo POST
         $params = $request->getPostParams();
         
         try {
             $this->system->updateCurriculum(
-                $params['id_user'],
-                $params['id_file']
+                $id_user,
+                $params['hash_file']
             );
             $rp = new ResponseHandler(200);
         } catch (Exception $ex) {
@@ -123,11 +149,15 @@ class CurriculumController
     // Função na Controller para "remover" o currículo do usuário comum -> Explicação das aspas no remove no arquivo Model/System.php
     public function removeCurriculum($request)
     {
-        $params = $request->getPostParams();
-        
+        // Pega o token do header Authorization
+        $token = $_SERVER["HTTP_AUTHORIZATION"];
+
+        // Recupera o id do usuário contido no token
+        $id_user = $this->account->get($token, "id");
+
         try {
             $this->system->removeCurriculum(
-                $params['id_user']
+                $id_user
             );
             $rp = new ResponseHandler(200);
         } catch (Exception $ex) {
@@ -157,11 +187,15 @@ class CurriculumController
     // Função na Controller para buscar os currículos ligados à todos os interesses de um usuário empresa
     public function searchCurByAllInt($request)
     {
-        $params = $request->getPostParams();
+        // Pega o token do header Authorization
+        $token = $_SERVER["HTTP_AUTHORIZATION"];
+
+        // Recupera o id do usuário contido no token
+        $id_user = $this->account->get($token, "id");
         
         try {
             $result = $this->system->searchCurByAllInt(
-                $params['id_user']
+                $id_user
             );
             $rp = new ResponseHandler(200, '', $result);
         } catch (Exception $ex) {

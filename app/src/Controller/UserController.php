@@ -43,7 +43,8 @@ class UserController
         $rp->printJson();
     }
 
-    // Função na Controller para logar na plataforma, a variável result recebe o tipo e o id de usuário e repassa para o front-end em caso de sucesso
+    // Função na Controller para logar na plataforma, a variável result recebe o tipo e o id de usuário e repassa 
+    // para o front-end em caso de sucesso
     public function login($request)
     {
         $params = $request->getPostParams();

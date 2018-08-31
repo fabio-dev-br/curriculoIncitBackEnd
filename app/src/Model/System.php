@@ -26,7 +26,7 @@ class System
     }
 
     // Função na Model para adicionar um novo currículo
-    public function addCurriculum($area, $course, $idFile, $institute, $graduateYear, $userId, $habilities)
+    public function addCurriculum($area, $course, $hashFile, $institute, $graduateYear, $userId, $habilities)
     {
         // Obtenção do dia e hora atual / referência: São Paulo / Para colocar no reg_date e reg_up da tabela curriculum
         date_default_timezone_set('America/Sao_Paulo');
@@ -39,12 +39,12 @@ class System
         // Verifica se existe uma linha do usuário, caso exista, é dado um update no registro existente, caso contrário, uma nova linha é inserida
         $curriculumId = $this->curriculum->getCurriculum($userId);
         if($curriculumId) {
-            if(!$this->curriculum->update($area, $course, $idFile, $regDate, $regUp, $institute, $graduateYear, $userId)) {
+            if(!$this->curriculum->update($area, $course, $hashFile, $regDate, $regUp, $institute, $graduateYear, $userId)) {
                 throw new Exception('Não foi possivel fazer o cadastro do currículo');
             }
         } else {
             // Insere o currículo na tabela, em caso de sucesso retorna o id do novo currículo, caso contrário, uma exceção é lançada
-            $curriculumId = $this->curriculum->insert($area, $course, $idFile, $regDate, $regUp, $institute, $graduateYear, $userId);
+            $curriculumId = $this->curriculum->insert($area, $course, $hashFile, $regDate, $regUp, $institute, $graduateYear, $userId);
             if(!$curriculumId) {
                 throw new Exception('Não foi possivel fazer o cadastro do currículo');
             }
@@ -78,7 +78,7 @@ class System
     }
 
     // Função na Model para atualizar o arquivo de currículo do usuário comum
-    public function updateCurriculum($userId, $fileId)
+    public function updateCurriculum($userId, $hashFile)
     {
         // Obtenção do dia e hora atual / referência: São Paulo / Para colocar no reg_up da tabela curriculum
         date_default_timezone_set('America/Sao_Paulo');
@@ -89,13 +89,13 @@ class System
 
         // Recupera as informações existentes do currículo do usuário em questão para serem passadas na função update abaixo
         // isso é feito, para a reutilização da função update
-        $curriculum = $this->curriculum->getAllVars($userId, $fileId, $regUp);
+        $curriculum = $this->curriculum->getAllVars($userId, $hashFile, $regUp);
         if(!$curriculum) {
             throw new Exception('O usuário não possui um currículo para atualizar');
         }
 
         // Atualiza o arquivo do currículo na tabela curriculum
-        if(!$this->curriculum->update($curriculum['area'], $curriculum['course'], $fileId, $curriculum['reg_date'], $regUp, $curriculum['institute'], $curriculum['graduate_year'], $curriculum['id_user'])) {
+        if(!$this->curriculum->update($curriculum['area'], $curriculum['course'], $hashFile, $curriculum['reg_date'], $regUp, $curriculum['institute'], $curriculum['graduate_year'], $curriculum['id_user'])) {
             throw new Exception('A atualização não ocorreu adequadamente');
         }
     }
