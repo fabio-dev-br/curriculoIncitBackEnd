@@ -29,8 +29,8 @@ class CurriculumController
     // Função na Controller para adicionar um novo currículo do usuário comum
     public function addCurriculum($request)
     {
-        // Pega o token do header Authorization
-        $token = $_SERVER["HTTP_AUTHORIZATION"];
+        // Pega o token do header Authorization através da função pertencente ao account
+        $token = $this->account->getToken();
 
         // Recupera o id do usuário contido no token
         $id_user = $this->account->get($token, "id");
@@ -45,6 +45,8 @@ class CurriculumController
         // O arquivo de currículo proveniente do front é movido para a pasta public/curriculos
         // se ocorreu normalmente, o hash do arquivo é retornado 
         // caso algo dê errado uma exceção é lançada
+        var_dump($files);
+        die("files");
         $hashFile = $this->fileHandler->moveFile($files['file']['tmp_name']);
             
         try {
@@ -71,8 +73,8 @@ class CurriculumController
     // Função na Controller para adicionar novos interesses da empresa
     public function addInterests($request)
     {
-        // Pega o token do header Authorization
-        $token = $_SERVER["HTTP_AUTHORIZATION"];
+        // Pega o token do header Authorization através da função pertencente ao account
+        $token = $this->account->getToken();
 
         // Recupera o id do usuário contido no token
         $id_user = $this->account->get($token, "id");
@@ -99,8 +101,8 @@ class CurriculumController
     // Função na Controller para remover um interesse de uma empresa
     public function deleteInterest($request)
     {
-        // Pega o token do header Authorization
-        $token = $_SERVER["HTTP_AUTHORIZATION"];
+        // Pega o token do header Authorization através da função pertencente ao account
+        $token = $this->account->getToken();
 
         // Recupera o id do usuário contido no token
         $id_user = $this->account->get($token, "id");
@@ -124,8 +126,8 @@ class CurriculumController
     // Função na Controller para atualizar o arquivo de currículo do usuário comum
     public function updateCurriculum($request)
     {
-        // Pega o token do header Authorization
-        $token = $_SERVER["HTTP_AUTHORIZATION"];
+        // Pega o token do header Authorization através da função pertencente ao account
+        $token = $this->account->getToken();
 
         // Recupera o id do usuário contido no token
         $id_user = $this->account->get($token, "id");
@@ -149,8 +151,8 @@ class CurriculumController
     // Função na Controller para "remover" o currículo do usuário comum -> Explicação das aspas no remove no arquivo Model/System.php
     public function removeCurriculum($request)
     {
-        // Pega o token do header Authorization
-        $token = $_SERVER["HTTP_AUTHORIZATION"];
+        // Pega o token do header Authorization através da função pertencente ao account
+        $token = $this->account->getToken();
 
         // Recupera o id do usuário contido no token
         $id_user = $this->account->get($token, "id");
@@ -170,11 +172,11 @@ class CurriculumController
     // Função na Controller para buscar os currículos ligados à uma lista de interesses fornecidos pelo usuário empresa
     public function searchCurByInt($request)
     {
-        $params = $request->getPostParams();
-        
+        $params = $_GET["interests"];
+
         try {
             $result = $this->system->searchCurByInt(
-                $params['interests']
+                $params
             );
             $rp = new ResponseHandler(200, '', $result);
         } catch (Exception $ex) {
@@ -187,8 +189,8 @@ class CurriculumController
     // Função na Controller para buscar os currículos ligados à todos os interesses de um usuário empresa
     public function searchCurByAllInt($request)
     {
-        // Pega o token do header Authorization
-        $token = $_SERVER["HTTP_AUTHORIZATION"];
+        // Pega o token do header Authorization através da função pertencente ao account
+        $token = $this->account->getToken();
 
         // Recupera o id do usuário contido no token
         $id_user = $this->account->get($token, "id");

@@ -31,4 +31,12 @@ class Account
             return false;
         }
     }
+
+    // Função responsável por pegar o token enviado no header AUTHORIZATION,
+    // a autenticação é do tipo Bearer ( Authorization: Bearer <token> )
+    public function getToken() 
+    {
+        $tokenAux = explode(" ", $_SERVER["HTTP_AUTHORIZATION"]);
+        return $tokenAux[1];
+    }
 }
