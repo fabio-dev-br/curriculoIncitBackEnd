@@ -37,6 +37,6 @@ class Account
     public function getToken() 
     {
         $tokenAux = explode(" ", $_SERVER["HTTP_AUTHORIZATION"]);
-        return $tokenAux[1];
+        return $tokenAux[1];        
     }
 }

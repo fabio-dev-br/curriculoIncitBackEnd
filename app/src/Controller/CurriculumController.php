@@ -40,15 +40,13 @@ class CurriculumController
 
         // Recupera o arquivo de currículo
         $files = $request->getFilesParams();
-
+        
         // ****** Tratamento do arquivo ******
         // O arquivo de currículo proveniente do front é movido para a pasta public/curriculos
         // se ocorreu normalmente, o hash do arquivo é retornado 
-        // caso algo dê errado uma exceção é lançada
-        var_dump($files);
-        die("files");
-        $hashFile = $this->fileHandler->moveFile($files['file']['tmp_name']);
-            
+        // caso algo dê errado uma exceção é lançada        
+        $hashFile = $this->fileHandler->moveFile($files['file']['tmp_name']); 
+        
         try {
             if(!$params['habilities']) {
                 throw new Exception('Não foram passadas habilidades');

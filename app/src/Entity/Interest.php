@@ -60,6 +60,7 @@ class Interest extends AbstractEntity
             foreach ($stms as $interest) {
                 $interests[] = $interest['interest'];
             }
+
             // Caso haja interesses é retornado o vetor interests, caso contrário, retorna-se false
             if($interests) {
                 return $interests;
@@ -67,5 +68,30 @@ class Interest extends AbstractEntity
             return false;
         }
         return false;
-    }    
+    }   
+    
+    // Função que retorna os ids dos usuários a partir de um interesse dado, em caso de sucesso retorna usersId, caso contrário, retorna false
+    public function getUsersId($interest)
+    {
+        $stm = $this->conn->query("select distinct id_user from interest where interest = ?", [
+                $interest
+            ]
+        );
+        if($stm) {
+            // Variável stms recebe todas as linhas encontradas na tabela interest com interesse fornecido
+            $stms = $stm->fetchAll();
+
+            // O vetor usersId receberá todos os IDs de usuários
+            foreach ($stms as $userId) {
+                $usersId[] = $userId['id_user'];
+            }
+
+            // Caso haja usuários é retornado o vetor usersId, caso contrário, retorna-se false
+            if($usersId) {
+                return $usersId;
+            }
+            return false;
+        }
+        return false;
+    }  
 }

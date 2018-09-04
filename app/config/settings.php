@@ -30,7 +30,7 @@ return [
         'tube_name' => 'phpstart_email',
         'credentials' => [
             'smtp_server' => '',
-            'smtp_port' => '',
+            'smtp_port' => '25',
             'ssl' => 'tls',
             'auth_email' => '',
             'auth_pass' => '',

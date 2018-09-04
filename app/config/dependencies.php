@@ -97,7 +97,8 @@ $dependencies[System::class] = function ($c) {
     $user = $c[User::class];
     $userHability = $c[UserHability::class];
     $interest = $c[Interest::class];
-    return new System($curriculum, $user, $userHability, $interest);
+    $emailWorker = $c[EmailWorker::class];
+    return new System($curriculum, $user, $userHability, $interest, $emailWorker);
 };
 
 $dependencies[FileHandler::class] = function($c) {
