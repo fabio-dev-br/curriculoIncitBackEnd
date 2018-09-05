@@ -97,8 +97,8 @@ $dependencies[System::class] = function ($c) {
     $user = $c[User::class];
     $userHability = $c[UserHability::class];
     $interest = $c[Interest::class];
-    $emailWorker = $c[EmailWorker::class];
-    return new System($curriculum, $user, $userHability, $interest, $emailWorker);
+    $tube = $c[Pheanstalk::class]->useTube($c['settings']['mail']['tube_name']);
+    return new System($curriculum, $user, $userHability, $interest, $tube);
 };
 
 $dependencies[FileHandler::class] = function($c) {

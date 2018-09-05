@@ -27,18 +27,18 @@ return [
         'toEmail' => ''
     ],
     'mail' => [
-        'tube_name' => 'phpstart_email',
+        'tube_name' => 'curriculum_email',
         'credentials' => [
-            'smtp_server' => '',
+            'smtp_server' => 'mail2.incluirtecnologia.com.br',
             'smtp_port' => '25',
             'ssl' => 'tls',
-            'auth_email' => '',
-            'auth_pass' => '',
+            'auth_email' => 'incit.curriculos@incluirtecnologia.com.br',
+            'auth_pass' => 'incit123456',
         ],
         'message' => [
-            'subject_prefix' => 'Incluir Tecnologia ',
-            'default_from' => 'suporte@incluirtecnologia.com.br',
-            'default_from_name' => 'Suporte',
+            'subject_prefix' => '',
+            'default_from' => 'incit.curriculos@incluirtecnologia.com.br',
+            'default_from_name' => 'Incit Currículo',
             'default_bcc' => false,
         ]
     ],

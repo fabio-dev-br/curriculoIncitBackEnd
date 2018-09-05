@@ -64,5 +64,9 @@ return [
     [
         'pattern' => '/searchCurByAllInt',
         'callback' => Controller\CurriculumController::class . ':searchCurByAllInt',
-    ]
+    ],
+    [
+        'pattern' => '/searchInt',
+        'callback' => Controller\CurriculumController::class . ':searchInt',
+    ],
 ];

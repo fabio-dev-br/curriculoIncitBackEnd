@@ -11,7 +11,8 @@ use IntecPhp\Model\ResponseHandler;
 use Exception;
 
 //  Classe CurriculumController é um Controller responsável por adição/remoção de currículo do usuário comum, 
-//  atualização do arquivo do currículo do usuário comum, adicionar/remover interesses da empresa, 
+//  atualização do arquivo do currículo do usuário comum, adicionar/remover interesses da empresa,
+//  recuperar interesses da empresa
 //  está diretamente ligado com as classes model System e Account 
 class CurriculumController
 {
@@ -195,6 +196,27 @@ class CurriculumController
         
         try {
             $result = $this->system->searchCurByAllInt(
+                $id_user
+            );
+            $rp = new ResponseHandler(200, '', $result);
+        } catch (Exception $ex) {
+            $rp = new ResponseHandler(400, $ex->getMessage());
+        }
+
+        $rp->printJson();
+    }
+
+    // Função na Controller para buscar os interesses ligados à uma empresa
+    public function searchInt($request)
+    {
+        // Pega o token do header Authorization através da função pertencente ao account
+        $token = $this->account->getToken();
+
+        // Recupera o id do usuário contido no token
+        $id_user = $this->account->get($token, "id");
+        
+        try {
+            $result = $this->system->searchInt(
                 $id_user
             );
             $rp = new ResponseHandler(200, '', $result);

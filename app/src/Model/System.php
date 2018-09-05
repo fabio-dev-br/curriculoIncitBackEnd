@@ -8,6 +8,7 @@ use IntecPhp\Entity\UserHability;
 use IntecPhp\Entity\Interest;
 use IntecPhp\Worker\EmailWorker;
 use Exception;
+use Pheanstalk\Pheanstalk;
 
 //  Classe System é um Model responsável por tratar do cadastro de um novo currículo
 //  está diretamente ligado com as entidades Curriculum, User e UserHability
@@ -17,15 +18,21 @@ class System
     private $user;
     private $userHability;
     private $interestEntity;
-    private $emailWorker;
+    private $emailProducer;
 
-    public function __construct(Curriculum $curriculum, User $user, UserHability $userHability, Interest $interest, EmailWorker $emailWorker)
+    public function __construct(
+        Curriculum $curriculum, 
+        User $user, 
+        UserHability $userHability, 
+        Interest $interest,
+        Pheanstalk $emailProducer
+        )
     {
         $this->curriculum = $curriculum;
         $this->user = $user;
         $this->userHability = $userHability;
         $this->interestEntity = $interest;
-        $this->emailWorker = $emailWorker;
+        $this->emailProducer = $emailProducer;
     }
 
     // Função na Model para adicionar um novo currículo
@@ -71,15 +78,17 @@ class System
 
             // Envio dos e-mails
             foreach ($emails as $email) {
-                $emailData['from_name'] = '';
-                $emailData['from_email'] = '';
-                $emailData['to_name'] = '';
-                $emailData['subject_prefix'] = '';
-                $emailData['subject'] = '';
-                $emailData['bcc_email'] = '';
-                $emailData['body'] = '';
-                $emailWorker->execute($emailData);
-            }            
+                $this
+                    ->emailProducer
+                    ->put(json_encode([
+                        'to_name' => 'alguem',
+                        'to_email' => $email,
+                        'subject_prefix' => '[Currículo Adicionado] ',
+                        'subject' => "Interesse: $hability",
+                        'body' => sprintf("Um novo currículo foi adicionado à plataforma, 
+                        referente ao interesse %s. Visite a plataforma para mais informações.", $hability),
+                    ]));
+            }
         }
                 
     }
@@ -181,6 +190,7 @@ class System
     {
         // A partir do ID do usuário empresa são encontrados os interesses dela
         $interests = $this->interestEntity->getInterests($userId);
+        
         // Para cada interesse são recuperados todos os currículos relacionados à cada um
         // 1º São obtidos os id_curriculum da tabela user_hability se as habilidades do usuário são iguais aos interesses buscados
         // 2º Os currículos são obtidos a partir dos id_curriculum
@@ -199,5 +209,13 @@ class System
             $result[$interest] = $curricula;
         }  
         return $result;
+    }
+
+    // Função na Model para buscar os interesses ligados à uma empresa
+    public function searchInt($userId)
+    {
+        // A partir do ID do usuário empresa são encontrados os interesses dela
+        $interests = $this->interestEntity->getInterests($userId);        
+        return $interests;
     }
 }
