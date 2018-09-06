@@ -98,7 +98,7 @@ class CurriculumController
     }
 
     // Função na Controller para remover um interesse de uma empresa
-    public function deleteInterest($request)
+    public function deleteInterests($request)
     {
         // Pega o token do header Authorization através da função pertencente ao account
         $token = $this->account->getToken();
@@ -110,8 +110,8 @@ class CurriculumController
         $params = $request->getPostParams();
         
         try {
-            $this->system->deleteInterest(
-                $params['interest'],
+            $this->system->deleteInterests(
+                $params['interests'],
                 $id_user
             );
             $rp = new ResponseHandler(200);

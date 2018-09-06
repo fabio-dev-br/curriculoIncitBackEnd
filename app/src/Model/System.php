@@ -38,32 +38,32 @@ class System
     // Função na Model para adicionar um novo currículo
     public function addCurriculum($area, $course, $hashFile, $institute, $graduateYear, $userId, $habilities)
     {
-        // // Obtenção do dia e hora atual / referência: São Paulo / Para colocar no reg_date e reg_up da tabela curriculum
-        // date_default_timezone_set('America/Sao_Paulo');
-        //     // mktime - obtém um timestamp Unix do dia atual
-        // $regDate  = mktime (date("h"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
-        //     // Converte o timestamp para o formato de data Y-m-d
-        // $regDate = date('Y-m-d h:i:s', $regDate);
-        // $regUp = $regDate;
+        // Obtenção do dia e hora atual / referência: São Paulo / Para colocar no reg_date e reg_up da tabela curriculum
+        date_default_timezone_set('America/Sao_Paulo');
+            // mktime - obtém um timestamp Unix do dia atual
+        $regDate  = mktime (date("h"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
+            // Converte o timestamp para o formato de data Y-m-d
+        $regDate = date('Y-m-d h:i:s', $regDate);
+        $regUp = $regDate;
 
-        // // Verifica se existe uma linha do usuário, caso exista, é dado um update no registro existente, caso contrário, uma nova linha é inserida
-        // $curriculumId = $this->curriculum->getCurriculum($userId);
-        // if($curriculumId) {
-        //     if(!$this->curriculum->update($area, $course, $hashFile, $regDate, $regUp, $institute, $graduateYear, $userId)) {
-        //         throw new Exception('Não foi possivel fazer o cadastro do currículo');
-        //     }
-        // } else {
-        //     // Insere o currículo na tabela, em caso de sucesso retorna o id do novo currículo, caso contrário, uma exceção é lançada
-        //     $curriculumId = $this->curriculum->insert($area, $course, $hashFile, $regDate, $regUp, $institute, $graduateYear, $userId);
-        //     if(!$curriculumId) {
-        //         throw new Exception('Não foi possivel fazer o cadastro do currículo');
-        //     }
-        // }
+        // Verifica se existe uma linha do usuário, caso exista, é dado um update no registro existente, caso contrário, uma nova linha é inserida
+        $curriculumId = $this->curriculum->getCurriculum($userId);
+        if($curriculumId) {
+            if(!$this->curriculum->update($area, $course, $hashFile, $regDate, $regUp, $institute, $graduateYear, $userId)) {
+                throw new Exception('Não foi possivel fazer o cadastro do currículo');
+            }
+        } else {
+            // Insere o currículo na tabela, em caso de sucesso retorna o id do novo currículo, caso contrário, uma exceção é lançada
+            $curriculumId = $this->curriculum->insert($area, $course, $hashFile, $regDate, $regUp, $institute, $graduateYear, $userId);
+            if(!$curriculumId) {
+                throw new Exception('Não foi possivel fazer o cadastro do currículo');
+            }
+        }
 
-        // // Após inserir o currículo, as habilidades são inseridas
-        // foreach ($habilities as $hability) {
-        //     $habilityId = $this->userHability->insert($hability, $curriculumId);
-        // }
+        // Após inserir o currículo, as habilidades são inseridas
+        foreach ($habilities as $hability) {
+            $habilityId = $this->userHability->insert($hability, $curriculumId);
+        }
 
         // Verifica quais empresas possuem interesses nas habilidades do usuário
         // e seus e-mails são recuperados
@@ -106,11 +106,13 @@ class System
     }
 
     // Função na Model para excluir um interesse de uma empresa
-    public function deleteInterest($interest, $userId)
+    public function deleteInterests($interests, $userId)
     {
-        // Exclui o interesse da tabela interest
-        if(!$this->interestEntity->delete($interest, $userId)) {
-            throw new Exception('Não foi possivel remover o interesse');
+        // Exclui os interesses da tabela interest
+        foreach ($interests as $interest) {
+            if(!$this->interestEntity->delete($interest, $userId)) {
+                throw new Exception('Não foi possivel remover o interesse');
+            }
         }
     }
 
@@ -172,7 +174,7 @@ class System
         foreach ($interests as $interest) {
             $idCurricula[$interest] = $this->userHability->getCurriculaByHab($interest);
             if(!$idCurricula) {
-                throw new Exception('Não há usuários com as habilidades desejadas');
+                throw new Exception('Não há usuários com a(s) habilidade(s) desejada(s)');
             }
 
             // A variável curricula é limpa já que é utilizada mais de uma vez no loop

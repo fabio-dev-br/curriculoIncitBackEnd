@@ -92,8 +92,8 @@ class Curriculum extends AbstractEntity
             ]
         );
 
-        // Caso a query tenha ocorrido perfeitamente retorna true
-        if($stm) {
+        // Caso a query tenha ocorrido perfeitamente e o id é válido, retorna true
+        if($stm && $id) {
             return true;
         }
         return false;

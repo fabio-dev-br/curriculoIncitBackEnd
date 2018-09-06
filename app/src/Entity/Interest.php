@@ -38,8 +38,8 @@ class Interest extends AbstractEntity
             ]
         );
         
-        // Caso a query tenha ocorrido perfeitamente retorna true
-        if($stm) {
+        // Caso a query tenha ocorrido perfeitamente e o id seja válido, retorna true
+        if($stm && $userId) {
             return true;
         }
         return false;
@@ -65,7 +65,6 @@ class Interest extends AbstractEntity
             if($interests) {
                 return $interests;
             }
-            return false;
         }
         return false;
     }   
@@ -90,7 +89,6 @@ class Interest extends AbstractEntity
             if($usersId) {
                 return $usersId;
             }
-            return false;
         }
         return false;
     }  

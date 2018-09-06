@@ -46,8 +46,8 @@ return [
         'callback' => Controller\CurriculumController::class . ':addInterests',
     ],
     [
-        'pattern' => '/deleteInterest',
-        'callback' => Controller\CurriculumController::class . ':deleteInterest',
+        'pattern' => '/deleteInterests',
+        'callback' => Controller\CurriculumController::class . ':deleteInterests',
     ],
     [
         'pattern' => '/updateCurriculum',
