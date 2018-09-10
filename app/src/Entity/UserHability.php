@@ -16,17 +16,21 @@ class UserHability extends AbstractEntity
     // todos os IDs dos currículos, caso contrário, retorna false
     public function getCurriculaByHab($hability)
     {
-        $stm = $this->conn->query("select id_curriculum from user_hability where hability = ?", [$hability]);
+        $stm = $this->conn->query("select distinct id_curriculum from user_hability where hability = ?", [$hability]);
         if($stm) {
             // Variável stms recebe todas as linhas encontradas na tabela user_hability com tal habilidade
             $stms =  $stm->fetchAll();
-            // O vetor curriculaId receberá todos os IDs dos currículos encontrados
-            foreach ($stms as $curriculumId) {
-                $curriculaId[] = $curriculumId['id_curriculum'];
-            }
-            if($curriculaId) {
-                return $curriculaId;
-            }
+
+            // Se existe algum valor no stms os IDs dos currículos são recuperados, caso contrário retorna false
+            if($stms) {
+                // O vetor curriculaId receberá todos os IDs dos currículos encontrados
+                foreach ($stms as $curriculumId) {
+                    $curriculaId[] = $curriculumId['id_curriculum'];
+                }
+                if($curriculaId) {
+                    return $curriculaId;
+                }
+            }      
         }
         return false;
     }
@@ -56,12 +60,16 @@ class UserHability extends AbstractEntity
         if($stm) {
             // Variável stms recebe todas as linhas encontradas na tabela user_hability com tal ID de currículo
             $stms =  $stm->fetchAll();
-            // O vetor habilities receberá todos as habilidades ligados ao currículo
-            foreach ($stms as $hability) {
-                $habilities[] = $hability['hability'];
-            }
-            if($habilities) {
-                return $habilities;
+
+            // Se existe algum valor no stms as habilidades ligadas ao currículo são recuperadas, caso contrário retorna false
+            if($stms) {
+                // O vetor habilities receberá todos as habilidades ligados ao currículo
+                foreach ($stms as $hability) {
+                    $habilities[] = $hability['hability'];
+                }
+                if($habilities) {
+                    return $habilities;
+                }
             }
         }
         return false;

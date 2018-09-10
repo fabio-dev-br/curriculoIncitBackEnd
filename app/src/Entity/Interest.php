@@ -56,15 +56,18 @@ class Interest extends AbstractEntity
             // Variável stms recebe todas as linhas encontradas na tabela interest com o ID de usuário fornecido
             $stms = $stm->fetchAll();
 
-            // O vetor interests receberá todos os interesses da empresa
-            foreach ($stms as $interest) {
-                $interests[] = $interest['interest'];
-            }
+            // Se existe algum valor no stms as interesses são recuperadas, caso contrário retorna false
+            if($stms) {
+                // O vetor interests receberá todos os interesses da empresa
+                foreach ($stms as $interest) {
+                    $interests[] = $interest['interest'];
+                }
 
-            // Caso haja interesses é retornado o vetor interests, caso contrário, retorna-se false
-            if($interests) {
-                return $interests;
-            }
+                // Caso haja interesses é retornado o vetor interests, caso contrário, retorna-se false
+                if($interests) {
+                    return $interests;
+                }
+            }      
         }
         return false;
     }   

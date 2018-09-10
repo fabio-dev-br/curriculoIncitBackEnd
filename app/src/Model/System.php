@@ -40,9 +40,11 @@ class System
     {
         // Obtenção do dia e hora atual / referência: São Paulo / Para colocar no reg_date e reg_up da tabela curriculum
         date_default_timezone_set('America/Sao_Paulo');
-            // mktime - obtém um timestamp Unix do dia atual
+        
+        // mktime - obtém um timestamp Unix do dia atual
         $regDate  = mktime (date("h"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
-            // Converte o timestamp para o formato de data Y-m-d
+        
+        // Converte o timestamp para o formato de data Y-m-d
         $regDate = date('Y-m-d h:i:s', $regDate);
         $regUp = $regDate;
 
@@ -121,9 +123,11 @@ class System
     {
         // Obtenção do dia e hora atual / referência: São Paulo / Para colocar no reg_up da tabela curriculum
         date_default_timezone_set('America/Sao_Paulo');
-            // mktime - obtém um timestamp Unix do dia atual
+        
+        // mktime - obtém um timestamp Unix do dia atual
         $regUp  = mktime (date("h"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
-            // Converte o timestamp para o formato de data Y-m-d
+        
+        // Converte o timestamp para o formato de data Y-m-d
         $regUp = date('Y-m-d h:i:s', $regUp);
 
         // Recupera as informações existentes do currículo do usuário em questão para serem passadas na função update abaixo
@@ -165,6 +169,7 @@ class System
     }
 
     // Função na Model para buscar os currículos ligados à uma lista de interesses fornecidos pelo usuário empresa
+    // Caso não exista currículos relacionados à habilidade, NULL é retornado no índice relacionado ao interesse
     public function searchCurByInt($interests)
     {
         // Para cada interesse são recuperados todos os currículos relacionados à cada um
@@ -172,18 +177,46 @@ class System
         // 2º Os currículos são obtidos a partir dos id_curriculum
         // 3º Os currículos encontrados são anexados à variável result de acordo com o interesse atual
         foreach ($interests as $interest) {
+            // Declaração da variável curricula, a qual armazena os currículos encontrados
+            $curricula = NULL;            
             $idCurricula[$interest] = $this->userHability->getCurriculaByHab($interest);
-            if(!$idCurricula) {
-                throw new Exception('Não há usuários com a(s) habilidade(s) desejada(s)');
-            }
+            
+            // Se não existe currículos ligados ao interesse dado, o elemento do vetor
+            // idCurricula, cujo índice é o interesse, recebe NULL
+            if(!$idCurricula[$interest]) {
+                $idCurricula[$interest] = NULL;                
+            } else {
+                foreach ($idCurricula[$interest] as $idCurriculum) {
+                    // Declaração da variável aux, a qual recebe todas as informações
+                    // da linha na tabela
+                    $aux = NULL;
+                    $aux = $this->curriculum->get($idCurriculum);
+    
+                    // O nome do usuário relacionado ao currículo é recuperado
+                    $name = $this->user->get($aux["id_user"]);
+                    $name = $name['name'];
 
-            // A variável curricula é limpa já que é utilizada mais de uma vez no loop
-            $curricula = NULL;
-            foreach ($idCurricula[$interest] as $idCurriculum) {
-                $curricula[] = $this->curriculum->get($idCurriculum); 
-            }
-            $result[$interest] = $curricula;
+                    // Converte o formato da data de update para d-m-Y h:i:s
+                    $upDate = date('d-m-Y h:i:s', strtotime($aux['reg_up']));
+
+                    // Para o armazenamento em curricula é feito uma seleção de apenas
+                    // colunas relevantes
+                    $curricula[] = array(
+                        'name' => $name,
+                        'area' => $aux['area'], 
+                        'course' => $aux['course'], 
+                        'graduate_year' => $aux['graduate_year'],  
+                        'hash_file' => $aux['hash_file'],
+                        'institute' => $aux['institute'], 
+                        'reg_up' => $upDate
+                    );
+                }
+            }                
+            $result[$interest] = $curricula;            
         }  
+
+        // Nessa função sempre será retornado result, caso não existam currículos relacionados à um 
+        // certo interesse, NULL é retorna nesse índice
         return $result;
     }
 
@@ -192,24 +225,49 @@ class System
     {
         // A partir do ID do usuário empresa são encontrados os interesses dela
         $interests = $this->interestEntity->getInterests($userId);
-        
+
+        // Caso a empresa não possua interesses ainda, é lançada uma exceção
+        if(!$interests) {
+            throw new Exception('Este usuário empresa não possui interesses ainda');
+        }
+
         // Para cada interesse são recuperados todos os currículos relacionados à cada um
         // 1º São obtidos os id_curriculum da tabela user_hability se as habilidades do usuário são iguais aos interesses buscados
         // 2º Os currículos são obtidos a partir dos id_curriculum
         // 3º Os currículos encontrados são anexados à variável result de acordo com o interesse atual
         foreach ($interests as $interest) {
+            // Declaração da variável curricula, a qual armazena os currículos encontrados
+            $curricula = NULL;  
             $idCurricula[$interest] = $this->userHability->getCurriculaByHab($interest);
-            if(!$idCurricula) {
-                throw new Exception('Não há usuários com as habilidades desejadas');
-            }
 
-            // A variável curricula é limpa já que é utilizada mais de uma vez no loop
-            $curricula = NULL;
-            foreach ($idCurricula[$interest] as $idCurriculum) {
-                $curricula[] = $this->curriculum->get($idCurriculum); 
+            // Se não existe currículos ligados ao interesse dado, o elemento do vetor
+            // idCurricula, cujo índice é o interesse, recebe NULL
+            if(!$idCurricula[$interest]) {
+                $idCurricula[$interest] = NULL;                
+            } else {
+                foreach ($idCurricula[$interest] as $idCurriculum) {
+                    // Declaração da variável aux, a qual recebe todas as informações
+                    // da linha na tabela
+                    $aux = NULL;
+                    $aux = $this->curriculum->get($idCurriculum);
+                    
+                    // Para o armazenamento em curricula é feito uma seleção de apenas
+                    // colunas relevantes
+                    $curricula[] = array(
+                        'area' => $aux['area'], 
+                        'course' => $aux['course'], 
+                        'graduate_year' => $aux['graduate_year'],  
+                        'hash_file' => $aux['hash_file'],
+                        'institute' => $aux['institute'], 
+                        'reg_up' => $aux['reg_up'] 
+                    );
+                }
             }
             $result[$interest] = $curricula;
-        }  
+        } 
+        
+        // Nessa função sempre será retornado result, caso não existam currículos relacionados à um 
+        // certo interesse, NULL é retorna nesse índice
         return $result;
     }
 

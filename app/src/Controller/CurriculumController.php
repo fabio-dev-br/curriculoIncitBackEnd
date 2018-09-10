@@ -171,8 +171,9 @@ class CurriculumController
     // Função na Controller para buscar os currículos ligados à uma lista de interesses fornecidos pelo usuário empresa
     public function searchCurByInt($request)
     {
-        $params = $_GET["interests"];
-
+        $params = $request->getQueryParams();
+        // var_dump($params);
+        // die('get');
         try {
             $result = $this->system->searchCurByInt(
                 $params
