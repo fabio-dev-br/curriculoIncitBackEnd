@@ -199,6 +199,9 @@ class System
                     // Converte o formato da data de update para d-m-Y h:i:s
                     $upDate = date('d-m-Y h:i:s', strtotime($aux['reg_up']));
 
+                    // As habilidades ligadas ao currículo do usuário são recuperadas
+                    $habilities = $this->userHability->getHabilitiesByCurriculum($idCurriculum);
+
                     // Para o armazenamento em curricula é feito uma seleção de apenas
                     // colunas relevantes
                     $curricula[] = array(
@@ -208,7 +211,8 @@ class System
                         'graduate_year' => $aux['graduate_year'],  
                         'hash_file' => $aux['hash_file'],
                         'institute' => $aux['institute'], 
-                        'reg_up' => $upDate
+                        'reg_up' => $upDate,
+                        'habilities' => $habilities
                     );
                 }
             }                
@@ -251,15 +255,27 @@ class System
                     $aux = NULL;
                     $aux = $this->curriculum->get($idCurriculum);
                     
+                    // O nome do usuário relacionado ao currículo é recuperado
+                    $name = $this->user->get($aux["id_user"]);
+                    $name = $name['name'];
+
+                    // Converte o formato da data de update para d-m-Y h:i:s
+                    $upDate = date('d-m-Y h:i:s', strtotime($aux['reg_up']));
+
+                    // As habilidades ligadas ao currículo do usuário são recuperadas
+                    $habilities = $this->userHability->getHabilitiesByCurriculum($idCurriculum);
+
                     // Para o armazenamento em curricula é feito uma seleção de apenas
                     // colunas relevantes
                     $curricula[] = array(
+                        'name' => $name,
                         'area' => $aux['area'], 
                         'course' => $aux['course'], 
                         'graduate_year' => $aux['graduate_year'],  
                         'hash_file' => $aux['hash_file'],
                         'institute' => $aux['institute'], 
-                        'reg_up' => $aux['reg_up'] 
+                        'reg_up' => $upDate,
+                        'habilities' => $habilities 
                     );
                 }
             }
@@ -277,5 +293,30 @@ class System
         // A partir do ID do usuário empresa são encontrados os interesses dela
         $interests = $this->interestEntity->getInterests($userId);        
         return $interests;
+    }
+
+    // Função na Model para recuperar o currículo
+    public function getCurriculum($userId)
+    {
+        // A partir do ID do usuário pessoa é encontrado o currículo dela
+        $aux = $this->curriculum->getCurriculum($userId);
+        
+        // Converte o formato da data de update para d-m-Y h:i:s
+        $upDate = date('d-m-Y h:i:s', strtotime($aux['reg_up']));
+
+        // Para o armazenamento em curriculum é feito uma seleção de apenas
+        // colunas relevantes
+        $curriculum = array(
+            'area' => $aux['area'], 
+            'course' => $aux['course'], 
+            'graduate_year' => $aux['graduate_year'],  
+            'hash_file' => $aux['hash_file'],
+            'institute' => $aux['institute'], 
+            'reg_up' => $upDate,
+            'habilities' => $habilities
+        );
+        var_dump($curriculum);
+        die("aw");
+        return $curriculum;
     }
 }

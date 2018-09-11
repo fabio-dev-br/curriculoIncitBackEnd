@@ -172,8 +172,7 @@ class CurriculumController
     public function searchCurByInt($request)
     {
         $params = $request->getQueryParams();
-        // var_dump($params);
-        // die('get');
+
         try {
             $result = $this->system->searchCurByInt(
                 $params
@@ -227,4 +226,41 @@ class CurriculumController
 
         $rp->printJson();
     }
+
+    // Função ma Controller para recuperar o currículo do usuário
+    public function getCurriculum($request)
+    {
+        // Pega o token do header Authorization através da função pertencente ao account
+        $token = $this->account->getToken();
+
+        // Recupera o id do usuário contido no token
+        $id_user = $this->account->get($token, "id");
+        
+        try {
+            $result = $this->system->getCurriculum(
+                $id_user
+            );
+            $rp = new ResponseHandler(200, '', $result);
+        } catch (Exception $ex) {
+            $rp = new ResponseHandler(400, $ex->getMessage());
+        }
+
+        $rp->printJson();
+    }
+
+    // // Função na Controller para fazer download de um currículo presente no servidor
+    // public function downloadCurriculum($request)
+    // {
+    //     // A função getQueryParams devolve um array dos parâmetros passados por URL
+    //     $hashFile = $request->getQueryParams();
+    //     $hashFile = $hashFile['hash_file'];
+    //     try {
+    //         $result = $this->fileHandler->downloadCurriculum($hashFile);
+    //         $rp = new ResponseHandler(200, '', $result);
+    //     } catch (Exception $ex) {
+    //         $rp = new ResponseHandler(400, $ex->getMessage());
+    //     }
+
+    //     $rp->printJson();
+    // }
 }

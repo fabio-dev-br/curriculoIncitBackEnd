@@ -68,5 +68,13 @@ return [
     [
         'pattern' => '/searchInt',
         'callback' => Controller\CurriculumController::class . ':searchInt',
+    ],    
+    [
+        'pattern' => '/getCurriculum',
+        'callback' => Controller\CurriculumController::class . ':getCurriculum',
     ],
+    // [
+    //     'pattern' => '/downloadCurriculum',
+    //     'callback' => Controller\CurriculumController::class . ':downloadCurriculum',
+    // ],
 ];
