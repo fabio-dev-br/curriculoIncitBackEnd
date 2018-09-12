@@ -12,8 +12,9 @@ class Curriculum extends AbstractEntity
     // Id
     protected $id = 'id';
 
-    // Função que verifica se o currículo de um usuário existe na tabela, em caso de sucesso retorna o id do currículo, caso contrário, retorna false
-    public function getCurriculum($userId)
+    // Função que verifica se o currículo de um usuário existe na tabela, em caso de sucesso 
+    // retorna o id do currículo, caso contrário, retorna false
+    public function getCurriculumId($userId)
     {
         $stm = $this->conn->query("select * from curriculum where id_user = ?", [$userId]);
         if($stm) {
@@ -25,8 +26,23 @@ class Curriculum extends AbstractEntity
         return false;
     }
 
-    // Função que recupera todas as variáveis da linha a partir do ID do usuário, em caso de sucesso retorna o vetor com as variáveis
-    // , caso contrário, retorna false
+    // Função recupera o currículo de um usuário existente através do Id do usuário, em caso 
+    // de sucesso retorna o currículo, caso contrário, retorna false
+    public function getCurriculum($userId)
+    {
+        $stm = $this->conn->query("select * from curriculum where id_user = ?", [$userId]);
+        if($stm) {
+            $curriculum =  $stm->fetch();
+            if($curriculum) {
+                return $curriculum;
+            }
+        }
+        return false;
+    }
+
+
+    // Função que recupera todas as variáveis da linha a partir do ID do usuário, em caso de 
+    // sucesso retorna o vetor com as variáveis, caso contrário, retorna false
     public function getAllVars($userId)
     {
         $stm = $this->conn->query("select * from curriculum where id_user = ?", [$userId]);
@@ -87,7 +103,7 @@ class Curriculum extends AbstractEntity
     // Função que "remove" o currículo da tabela -> Explicação das aspas no remove no arquivo Model/System.php
     public function delete($id)
     {
-        $stm = $this->conn->query("update curriculum set id_file = NULL where id = ?" , [
+        $stm = $this->conn->query("update curriculum set hash_file = NULL where id = ?" , [
                 $id
             ]
         );

@@ -38,29 +38,4 @@ class FileHandler
         return sprintf('%s%s', $this->path, $fileHash);
     }
 
-    // // Download do currículo presente no servidor
-    // public function downloadCurriculum($fileHash)
-    // {
-    //     // O caminho até o arquivo é montado
-    //     $filePath = $this->concatPathFileName($fileHash);
-
-    //     // Verifica se o arquivo existe, em caso de fracasso
-    //     // lança uma exceção 
-    //     if(!file_exists($filePath)) {
-    //         throw new Exception('Arquivo não encontrado');
-    //     } else {
-    //         // header("Cache-Control: public");
-    //         // header("Content-Description: File Transfer");
-    //         // header("Content-Disposition: attachment; filename=$file");
-    //         // header("Content-Type: application/zip");
-    //         // header("Content-Transfer-Encoding: binary");
-    //         readfile($filePath);
-    //         die("file");
-    //         return(readfile($filePath));
-            
-    //     }
-    //     // var_dump($fileHash);
-    //     // var_dump();
-    //     // die("file exists");
-    // }
 }

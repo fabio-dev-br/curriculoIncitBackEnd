@@ -156,6 +156,8 @@ class CurriculumController
         // Recupera o id do usuário contido no token
         $id_user = $this->account->get($token, "id");
 
+        var_dump($token . " " . $id_user);
+        die("aq");
         try {
             $this->system->removeCurriculum(
                 $id_user
@@ -248,19 +250,4 @@ class CurriculumController
         $rp->printJson();
     }
 
-    // // Função na Controller para fazer download de um currículo presente no servidor
-    // public function downloadCurriculum($request)
-    // {
-    //     // A função getQueryParams devolve um array dos parâmetros passados por URL
-    //     $hashFile = $request->getQueryParams();
-    //     $hashFile = $hashFile['hash_file'];
-    //     try {
-    //         $result = $this->fileHandler->downloadCurriculum($hashFile);
-    //         $rp = new ResponseHandler(200, '', $result);
-    //     } catch (Exception $ex) {
-    //         $rp = new ResponseHandler(400, $ex->getMessage());
-    //     }
-
-    //     $rp->printJson();
-    // }
 }

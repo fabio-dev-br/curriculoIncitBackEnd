@@ -43,11 +43,12 @@ class RequestPassword extends AbstractEntity
         ]);
     }
 
-    // Função que adiciona uma entrada à tabela request_password, em caso de sucesso retorna o ID do novo request, caso contrário, retorna false
+    // Função que adiciona uma entrada à tabela request_password, em caso de sucesso 
+    // retorna o ID do novo request, caso contrário, retorna false
     public function insert($userId, $hash, $expDate)
     {
-        // Caso o email exista na base de usuário (ou seja, existe algum valor em userID), a inserção na tabela request_password é feita
-        // em caso contrário, retorna false
+        // Caso o email exista na base de usuário (ou seja, existe algum valor em userID), 
+        // a inserção na tabela request_password é feita em caso contrário, retorna false
         if($userId) {
             $stm = $this->conn->query("insert into request_password (id_user, hash, exp_date) values (?, ?, ?)", [
                 $userId, 

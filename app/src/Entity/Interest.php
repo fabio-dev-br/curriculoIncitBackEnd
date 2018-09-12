@@ -45,7 +45,8 @@ class Interest extends AbstractEntity
         return false;
     }
 
-    // Função que retorna os interesses na presentes na tabela interest, em caso de sucesso retorna interests, caso contrário, retorna false
+    // Função que retorna os interesses na presentes na tabela interest, em caso de sucesso 
+    // retorna interests, caso contrário, retorna false
     public function getInterests($userId)
     {
         $stm = $this->conn->query("select interest from interest where id_user = ?", [
@@ -72,7 +73,8 @@ class Interest extends AbstractEntity
         return false;
     }   
     
-    // Função que retorna os ids dos usuários a partir de um interesse dado, em caso de sucesso retorna usersId, caso contrário, retorna false
+    // Função que retorna os ids dos usuários a partir de um interesse dado, em caso de sucesso 
+    // retorna usersId, caso contrário, retorna false
     public function getUsersId($interest)
     {
         $stm = $this->conn->query("select distinct id_user from interest where interest = ?", [

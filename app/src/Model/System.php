@@ -49,7 +49,7 @@ class System
         $regUp = $regDate;
 
         // Verifica se existe uma linha do usuário, caso exista, é dado um update no registro existente, caso contrário, uma nova linha é inserida
-        $curriculumId = $this->curriculum->getCurriculum($userId);
+        $curriculumId = $this->curriculum->getCurriculumId($userId);
         if($curriculumId) {
             if(!$this->curriculum->update($area, $course, $hashFile, $regDate, $regUp, $institute, $graduateYear, $userId)) {
                 throw new Exception('Não foi possivel fazer o cadastro do currículo');
@@ -150,7 +150,7 @@ class System
     public function removeCurriculum($userId)
     {
         // O ID do currículo é recuperado ao fornecer o ID de usuário na função abaixo
-        $idCurriculum = $this->curriculum->getCurriculum($userId);
+        $idCurriculum = $this->curriculum->getCurriculumId($userId);
 
         // Atualiza o arquivo do currículo na tabela curriculum a partir do ID do currículo
         if(!$this->curriculum->delete($idCurriculum)) {
@@ -300,13 +300,21 @@ class System
     {
         // A partir do ID do usuário pessoa é encontrado o currículo dela
         $aux = $this->curriculum->getCurriculum($userId);
-        
+
         // Converte o formato da data de update para d-m-Y h:i:s
         $upDate = date('d-m-Y h:i:s', strtotime($aux['reg_up']));
+
+        // O nome do usuário relacionado ao currículo é recuperado
+        $name = $this->user->get($userId);
+        $name = $name['name'];
+
+        // As habilidades ligadas ao currículo do usuário são recuperadas
+        $habilities = $this->userHability->getHabilitiesByCurriculum($aux['id']);
 
         // Para o armazenamento em curriculum é feito uma seleção de apenas
         // colunas relevantes
         $curriculum = array(
+            'name' => $name,
             'area' => $aux['area'], 
             'course' => $aux['course'], 
             'graduate_year' => $aux['graduate_year'],  
@@ -315,8 +323,6 @@ class System
             'reg_up' => $upDate,
             'habilities' => $habilities
         );
-        var_dump($curriculum);
-        die("aw");
         return $curriculum;
     }
 }

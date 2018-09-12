@@ -73,8 +73,4 @@ return [
         'pattern' => '/getCurriculum',
         'callback' => Controller\CurriculumController::class . ':getCurriculum',
     ],
-    // [
-    //     'pattern' => '/downloadCurriculum',
-    //     'callback' => Controller\CurriculumController::class . ':downloadCurriculum',
-    // ],
 ];
