@@ -89,7 +89,8 @@ $dependencies[Contact::class] = function ($c) {
 $dependencies[Access::class] = function ($c) {
     $user = $c[User::class];
     $requestPass = $c[RequestPassword::class];
-    return new Access($user, $requestPass);
+    $tube = $c[Pheanstalk::class]->useTube($c['settings']['mail']['tube_name']);
+    return new Access($user, $requestPass, $tube);
 };
 
 $dependencies[System::class] = function ($c) {

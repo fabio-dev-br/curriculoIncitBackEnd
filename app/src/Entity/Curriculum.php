@@ -40,21 +40,6 @@ class Curriculum extends AbstractEntity
         return false;
     }
 
-
-    // Função que recupera todas as variáveis da linha a partir do ID do usuário, em caso de 
-    // sucesso retorna o vetor com as variáveis, caso contrário, retorna false
-    public function getAllVars($userId)
-    {
-        $stm = $this->conn->query("select * from curriculum where id_user = ?", [$userId]);
-        if($stm) {
-            $curriculum =  $stm->fetch();
-            if($curriculum) {
-                return $curriculum;
-            }
-        }
-        return false;
-    }
-
     // Função que insere o currículo na tabela, em caso de sucesso retorna o ID do currículo novo, caso contrário, retorna false
     public function insert($area, $course, $hashFile, $regDate, $regUp, $institute, $graduateYear, $userId)
     {

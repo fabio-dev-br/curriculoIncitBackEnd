@@ -69,12 +69,12 @@ class UserController
 
     // 1ª Função na Controller para recuperar a senha (Responsável por tratar a inserção na tabela request_password, ou seja, a parte que
     // enviará o e-mail ao usuário)
-    public function forgetMyPass($request)
+    public function forgotMyPass($request)
     {
         $params = $request->getPostParams();
         
         try {
-            $this->access->forgetMyPass(
+            $this->access->forgotMyPass(
                 $params['email']
             );
             $rp = new ResponseHandler(200);

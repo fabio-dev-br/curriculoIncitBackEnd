@@ -65,7 +65,7 @@ class User extends AbstractEntity
     }    
 
     // Função que verifica se o usuário existe na tabela, em caso de sucesso retorna o id do usuário, caso contrário, retorna false
-    public function getUser($email)
+    public function getUserId($email)
     {
         $stm = $this->conn->query("select * from user where email = ?", [$email]);
         if($stm) {

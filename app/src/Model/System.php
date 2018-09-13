@@ -36,7 +36,15 @@ class System
     }
 
     // Função na Model para adicionar um novo currículo
-    public function addCurriculum($area, $course, $hashFile, $institute, $graduateYear, $userId, $habilities)
+    public function addCurriculum(
+        $area, 
+        $course, 
+        $hashFile, 
+        $institute, 
+        $graduateYear, 
+        $userId, 
+        $habilities
+        )
     {
         // Obtenção do dia e hora atual / referência: São Paulo / Para colocar no reg_date e reg_up da tabela curriculum
         date_default_timezone_set('America/Sao_Paulo');
@@ -48,15 +56,34 @@ class System
         $regDate = date('Y-m-d h:i:s', $regDate);
         $regUp = $regDate;
 
-        // Verifica se existe uma linha do usuário, caso exista, é dado um update no registro existente, caso contrário, uma nova linha é inserida
+        // Verifica se existe uma linha do usuário, caso exista, é dado um update no registro existente, 
+        // caso contrário, uma nova linha é inserida
         $curriculumId = $this->curriculum->getCurriculumId($userId);
         if($curriculumId) {
-            if(!$this->curriculum->update($area, $course, $hashFile, $regDate, $regUp, $institute, $graduateYear, $userId)) {
+            if(!$this->curriculum->update(
+                $area, 
+                $course, 
+                $hashFile, 
+                $regDate, 
+                $regUp, 
+                $institute, 
+                $graduateYear, 
+                $userId)
+            ) {
                 throw new Exception('Não foi possivel fazer o cadastro do currículo');
             }
         } else {
             // Insere o currículo na tabela, em caso de sucesso retorna o id do novo currículo, caso contrário, uma exceção é lançada
-            $curriculumId = $this->curriculum->insert($area, $course, $hashFile, $regDate, $regUp, $institute, $graduateYear, $userId);
+            $curriculumId = $this->curriculum->insert(
+                $area, 
+                $course, 
+                $hashFile, 
+                $regDate, 
+                $regUp, 
+                $institute, 
+                $graduateYear, 
+                $userId
+            );
             if(!$curriculumId) {
                 throw new Exception('Não foi possivel fazer o cadastro do currículo');
             }
@@ -65,10 +92,13 @@ class System
         // Após inserir o currículo, as habilidades são inseridas
         foreach ($habilities as $hability) {
             $habilityId = $this->userHability->insert($hability, $curriculumId);
+            if(!$habilityId) {
+                throw new Exception('Não foi possivel fazer o cadastro da habilidade ' + $hability);
+            }
         }
 
         // Verifica quais empresas possuem interesses nas habilidades do usuário
-        // e seus e-mails são recuperados
+        // e seus e-mails são recuperados para um posterior envio
         foreach ($habilities as $hability) {
             $idUsers[$hability] = $this->interestEntity->getUsersId($hability);        
 
@@ -119,8 +149,26 @@ class System
     }
 
     // Função na Model para atualizar o arquivo de currículo do usuário comum
-    public function updateCurriculum($userId, $hashFile)
+    public function updateCurriculum(
+        $userId, 
+        $hashFile, 
+        $newHabilities
+        )
     {
+        // ** Remoção das habilidades antigas **
+        // Recupera o id do currículo pertencente ao usuário
+        $curriculumId = $this->curriculum->getCurriculumId($userId);
+
+        // Recupera as habilidades do usuário ligados ao currículo
+        $habilities = $this->userHability->getHabilitiesByCurriculum($curriculumId);
+
+        // Cada habilidade relacionada ao currículo é removida da tabela
+        foreach ($habilities as $hability) {
+            if(!$this->userHability->delete($hability, $curriculumId)) {
+                throw new Exception('Não foi possivel fazer a remoção da habilidade do usuário');
+            }
+        }         
+
         // Obtenção do dia e hora atual / referência: São Paulo / Para colocar no reg_up da tabela curriculum
         date_default_timezone_set('America/Sao_Paulo');
         
@@ -130,16 +178,58 @@ class System
         // Converte o timestamp para o formato de data Y-m-d
         $regUp = date('Y-m-d h:i:s', $regUp);
 
-        // Recupera as informações existentes do currículo do usuário em questão para serem passadas na função update abaixo
-        // isso é feito, para a reutilização da função update
-        $curriculum = $this->curriculum->getAllVars($userId, $hashFile, $regUp);
-        if(!$curriculum) {
-            throw new Exception('O usuário não possui um currículo para atualizar');
+        // Recupera as informações do currículo para o update,
+        // isso é necessário pois o update é utilizado tanto 
+        // na atualização do currículo quanto na adição se o
+        // usuário já possui um registro na tabela de currículo
+        $curriculum = $this->curriculum->getCurriculum($userId);
+        
+        // Atualiza o arquivo do currículo na tabela curriculum
+        if(!$this->curriculum->update(
+            $curriculum['area'], 
+            $curriculum['course'], 
+            $hashFile, 
+            $curriculum['reg_date'], 
+            $regUp, 
+            $curriculum['institute'], 
+            $curriculum['graduate_year'], 
+            $curriculum['id_user'])
+        ) {
+            throw new Exception('A atualização não ocorreu adequadamente');
+        }
+        
+        // Insere as novas habilidades
+        foreach ($newHabilities as $hability) {
+            $habilityId = $this->userHability->insert($hability, $curriculumId);
+            if(!$habilityId) {
+                throw new Exception('Não foi possivel fazer o cadastro da habilidade ' + $hability);
+            }
         }
 
-        // Atualiza o arquivo do currículo na tabela curriculum
-        if(!$this->curriculum->update($curriculum['area'], $curriculum['course'], $hashFile, $curriculum['reg_date'], $regUp, $curriculum['institute'], $curriculum['graduate_year'], $curriculum['id_user'])) {
-            throw new Exception('A atualização não ocorreu adequadamente');
+        // Verifica quais empresas possuem interesses nas habilidades do usuário
+        // e seus e-mails são recuperados para um posterior envio
+        foreach ($newHabilities as $hability) {
+            $idUsers[$hability] = $this->interestEntity->getUsersId($hability);        
+
+            // A variável emails é limpa já que é utilizada mais de uma vez no loop
+            $emails = NULL;
+            foreach ($idUsers[$hability] as $idUser) {
+                $emails[] = $this->user->getOnlyEmail($idUser); 
+            }            
+
+            // Envio dos e-mails
+            foreach ($emails as $email) {
+                $this
+                    ->emailProducer
+                    ->put(json_encode([
+                        'to_name' => 'alguem',
+                        'to_email' => $email,
+                        'subject_prefix' => '[Currículo Adicionado] ',
+                        'subject' => "Interesse: $hability",
+                        'body' => sprintf("Um novo currículo foi adicionado à plataforma, 
+                        referente ao interesse %s. Visite a plataforma para mais informações.", $hability),
+                    ]));
+            }
         }
     }
 

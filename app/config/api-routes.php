@@ -30,8 +30,8 @@ return [
         'callback' => Controller\UserController::class . ':login',
     ],
     [
-        'pattern' => '/forgetMyPass',
-        'callback' => Controller\UserController::class . ':forgetMyPass',
+        'pattern' => '/forgotMyPass',
+        'callback' => Controller\UserController::class . ':forgotMyPass',
     ],
     [
         'pattern' => '/changeMyPass',

@@ -133,11 +133,21 @@ class CurriculumController
 
         // Recupera os parâmetros vindos pelo POST
         $params = $request->getPostParams();
+
+        // Recupera o arquivo de currículo
+        $files = $request->getFilesParams();
+        
+        // ****** Tratamento do arquivo ******
+        // O arquivo de currículo proveniente do front é movido para a pasta public/curriculos
+        // se ocorreu normalmente, o hash do arquivo é retornado 
+        // caso algo dê errado uma exceção é lançada        
+        $hashFile = $this->fileHandler->moveFile($files['file']['tmp_name']); 
         
         try {
             $this->system->updateCurriculum(
                 $id_user,
-                $params['hash_file']
+                $hashFile,
+                $params['habilities']
             );
             $rp = new ResponseHandler(200);
         } catch (Exception $ex) {
@@ -156,8 +166,6 @@ class CurriculumController
         // Recupera o id do usuário contido no token
         $id_user = $this->account->get($token, "id");
 
-        var_dump($token . " " . $id_user);
-        die("aq");
         try {
             $this->system->removeCurriculum(
                 $id_user
