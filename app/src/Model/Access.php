@@ -7,6 +7,7 @@ use IntecPhp\Entity\RequestPassword;
 use IntecPhp\Worker\EmailWorker;
 use Exception;
 use Pheanstalk\Pheanstalk;
+use IntecPhp\Model\Account;
 
 //  Classe Access é um Model responsável por tratar do cadastro de um novo usuário, o login e a recuperação de senha
 //  está diretamente ligado com as entidades User e RequestPassword
@@ -15,16 +16,19 @@ class Access
     private $user;
     private $requestPass;
     private $emailProducer;
+    private $account;
 
     public function __construct(
         User $user, 
         RequestPassword $requestPass, 
-        Pheanstalk $emailProducer
+        Pheanstalk $emailProducer,
+        Account $account
         )
     {
         $this->user = $user;
         $this->requestPass = $requestPass;
         $this->emailProducer = $emailProducer;
+        $this->account = $account;
     }
 
     // Função na Model para criar uma nova conta de usuário
@@ -59,6 +63,7 @@ class Access
         if(!$userId) {
             throw new Exception('Não existe um usuário com esse e-mail');
         }
+
         // Recupera o hash existente na tabela a partir do email
         $hashFromTable = $this->user->getHash($email);
 
@@ -112,8 +117,15 @@ class Access
                     throw new Exception('A requisição não ocorreu adequadamente');
                 }   
             }
-            // Gerar a URL para redefinir a senha
-            $url = sprintf('%s%s', 'http://localhost:8080/changeMyPass/', $hash);
+
+            // Gera a URL para redefinir a senha: está presente uma chave que é, na verdade, a 
+            // hash gerada e o id do usuário encriptografados pela função encode da classe Account
+            $key = $this->account->encode(
+                array(
+                    'hash'  => $hash,
+                    'userId'=> $userId
+                ));
+            $url = sprintf('%s?key=%s', 'http://localhost:8080/change-my-pass', $key);
 
             // Envia o e-mail de recuperação
             $this
@@ -134,17 +146,13 @@ class Access
         }        
     }
 
-    // 2ª Função na Model para recuperar a senha (Responsável por comparar a hash proveniente do email com as entradas 
-    // da tabela request_password e trocar a senha em caso de sucesso na etapa anterior)
-    public function changeMyPass(
+    // 2ª Função na Model para recuperar a senha (Responsável por comparar o hash e a key(key=>Id do usuário criptografado) 
+    // provenientes do email com as entradas da tabela request_password)
+    public function verifyHashChangePass(
         $hash, 
-        $email, 
-        $newPass
+        $userId
         )
     {
-        // Busca o id do usuário a partir do email recebido
-        $userId = $this->user->getUserId($email);
-
         // Obtenção do dia e hora atual / referência: São Paulo
         date_default_timezone_set('America/Sao_Paulo');
             // mktime - obtém um timestamp Unix do dia atual
@@ -161,10 +169,15 @@ class Access
         // Chama a função da entidade RequestPassword para comparar o hash com o registro da tabela request_password
         if(!$this->requestPass->compare($userId, $hash)) {
             throw new Exception('A requisição não ocorreu adequadamente');
-        } 
+        }   
+    }
 
-        // Gera um hash para inserir a nova senha na tabela de usuário
-        $hash = md5($newPass);  
+    // 3ª Função na Model para recuperar a senha (Responsável por trocar a senha em caso de sucesso na etapa anterior)
+    public function changeMyPass($newPass, $userId)
+    {
+        // Gera um hash para inserir a senha na tabela de usuário
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+
         if(!$this->user->updatePass($userId, $hash)) {
             throw new Exception('A troca de senha não ocorreu adequadamente'); 
         }   

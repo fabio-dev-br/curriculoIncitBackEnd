@@ -55,7 +55,9 @@ class UserController
                 $params['password']
             );
 
-            $token = $this->account->login($result);
+            // Criptografa as informações para enviar para o front-end
+            $token = $this->account->encode($result);
+            
             $rp = new ResponseHandler(200, '', [
                 'token' => $token,
                 'user_type' => $result['user_type']
@@ -85,17 +87,42 @@ class UserController
         $rp->printJson();
     }
 
-    // 2ª Função na Controller para recuperar a senha (Responsável por comparar a hash proveniente do email com as entradas 
-    // da tabela request_password e trocar a senha em caso de sucesso na etapa anterior)
+    // 2ª Função na Controller para recuperar a senha (Responsável por comparar o hash 
+    // e o id(key => hash e id do usuário criptografados) provenientes do email com 
+    // as entradas da tabela request_password)
+    public function verifyHashChangePass($request)
+    {
+        $params = $request->getQueryParams();
+        
+        // Recupera o id do usuário e o hash contidos na key
+        $userId = $this->account->get($params['key'], "userId");
+        $hash = $this->account->get($params['key'], "hash");
+
+        try {
+            $this->access->verifyHashChangePass(
+                $hash,
+                $userId
+            );
+            $rp = new ResponseHandler(200);
+        } catch (Exception $ex) {
+            $rp = new ResponseHandler(400, $ex->getMessage());
+        }
+
+        $rp->printJson();
+    }
+
+    // 3ª Função na Controller para recuperar a senha (Responsável por trocar a senha em caso de sucesso na etapa anterior)
     public function changeMyPass($request)
     {
         $params = $request->getPostParams();
         
+        // Recupera o id do usuário 
+        $userId = $this->account->get($params['key'], "userId");
+
         try {
-            $this->access->changeMyPass(
-                $params['hash'], 
-                $params['email'], 
-                $params['newPass']
+            $this->access->changeMyPass( 
+                $params['newPass'],
+                $userId
             );
             $rp = new ResponseHandler(200);
         } catch (Exception $ex) {

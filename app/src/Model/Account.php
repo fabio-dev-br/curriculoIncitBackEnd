@@ -14,7 +14,7 @@ class Account
         $this->jwt = $jwt;
     }
 
-    public function login(array $info)
+    public function encode(array $info)
     {
         return $this->jwt->encode($info);
     }

@@ -13,11 +13,11 @@ return [
     ],
     'jwt' => [
         'app_secret' => getenv('APP_SECRET'),
-        'token_expires' => 1800 // 30 min
+        'token_expires' => 172800 // 2 dias
     ],
     'session' => [
         'cookie_name' => getenv('APP_COOKIE_NAME'),
-        'cookie_expires' => 1800 // 30 min
+        'cookie_expires' => 172800 // 2 dias
     ],
     'pheanstalk' => [
         'host' => getenv('BEANSTALK_HOST'),

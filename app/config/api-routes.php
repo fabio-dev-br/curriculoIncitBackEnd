@@ -34,6 +34,10 @@ return [
         'callback' => Controller\UserController::class . ':forgotMyPass',
     ],
     [
+        'pattern' => '/verifyHashChangePass',
+        'callback' => Controller\UserController::class . ':verifyHashChangePass',
+    ],
+    [
         'pattern' => '/changeMyPass',
         'callback' => Controller\UserController::class . ':changeMyPass',
     ],
