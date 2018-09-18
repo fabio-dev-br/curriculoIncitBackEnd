@@ -42,7 +42,7 @@ class Access
     {
         // Verifica se já existe o usuário na tabela, em caso de sucesso uma exceção é lançada
         if($this->user->getUserId($email)) {
-            throw new Exception('Existe um usuário com esse e-mail');
+            throw new Exception('Existe um usuário com esse e-mail.');
         }
         
         // Gera um hash para inserir a senha na tabela de usuário
@@ -51,7 +51,7 @@ class Access
         // Insere o usuário na tabela, em caso de sucesso retorna o id do novo usuário, caso contrário, uma exceção é lançada
         $userId = $this->user->insert($name, $email, $identity, $user_type, $hash);
         if(!$userId) {
-            throw new Exception('Não foi possivel fazer o cadastro do usuário');
+            throw new Exception('Não foi possivel fazer o cadastro do usuário.');
         }
     }
 
@@ -61,7 +61,7 @@ class Access
         // Verifica se o email existe, em caso de sucesso retorna o id do usuário, caso contrário, uma exceção é lançada 
         $userId = $this->user->getUserId($email);
         if(!$userId) {
-            throw new Exception('Não existe um usuário com esse e-mail');
+            throw new Exception('Não existe um usuário com esse e-mail.');
         }
 
         // Recupera o hash existente na tabela a partir do email
@@ -70,13 +70,13 @@ class Access
         // Compara a senha fornecida com o hash existente na tabela de usuário
         // em caso de fracasso, uma exceção é lançada
         if(!password_verify($password, $hashFromTable)) {
-            throw new Exception('Senha incorreta. Tente novamente ou clique em esqueci a senha');
+            throw new Exception('Senha incorreta. Tente novamente ou clique em esqueci a senha.');
         }
 
         // Em caso de sucesso recupera o tipo do usuário e o id a partir do e-mail, caso contrário, uma exceção é lançada
         $info = $this->user->getInfo($email);
         if(!$info) {
-            throw new Exception('O login não ocorreu adequadamente');
+            throw new Exception('O login não ocorreu adequadamente.');
         }
         return $info;
     }
@@ -114,7 +114,7 @@ class Access
             } else {
                 // Chama a função da entidade RequestPassword para adicionar um registro na tabela request_password
                 if(!$this->requestPass->insert($userId, $hash, $expDate)) {
-                    throw new Exception('A requisição não ocorreu adequadamente');
+                    throw new Exception('A requisição não ocorreu adequadamente.');
                 }   
             }
 
@@ -163,12 +163,12 @@ class Access
         // Chama a função da entidade RequestPassword para comparar a data da requisição com o registro da tabela request_password
         // em caso de sucesso (a data atual se encontra dentro do limite estipulado de 1 dia) retorna true
         if(!$this->requestPass->compareDate($userId, $currentDate)) {
-            throw new Exception('A requisição expirou');
+            throw new Exception('A requisição expirou.');
         }
 
         // Chama a função da entidade RequestPassword para comparar o hash com o registro da tabela request_password
         if(!$this->requestPass->compare($userId, $hash)) {
-            throw new Exception('A requisição não ocorreu adequadamente');
+            throw new Exception('A requisição não ocorreu adequadamente.');
         }   
     }
 
@@ -176,10 +176,10 @@ class Access
     public function changeMyPass($newPass, $userId)
     {
         // Gera um hash para inserir a senha na tabela de usuário
-        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $hash = password_hash($newPass, PASSWORD_DEFAULT);
 
         if(!$this->user->updatePass($userId, $hash)) {
-            throw new Exception('A troca de senha não ocorreu adequadamente'); 
+            throw new Exception('A troca de senha não ocorreu adequadamente.'); 
         }   
     }    
 }

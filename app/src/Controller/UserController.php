@@ -93,9 +93,9 @@ class UserController
     public function verifyHashChangePass($request)
     {
         $params = $request->getQueryParams();
-        
+
         // Recupera o id do usuário e o hash contidos na key
-        $userId = $this->account->get($params['key'], "userId");
+        $userId = $this->account->get($params['key'], "userId");        
         $hash = $this->account->get($params['key'], "hash");
 
         try {
@@ -118,12 +118,12 @@ class UserController
         
         // Recupera o id do usuário 
         $userId = $this->account->get($params['key'], "userId");
-
+             
         try {
             $this->access->changeMyPass( 
                 $params['newPass'],
                 $userId
-            );
+            );            
             $rp = new ResponseHandler(200);
         } catch (Exception $ex) {
             $rp = new ResponseHandler(400, $ex->getMessage());
