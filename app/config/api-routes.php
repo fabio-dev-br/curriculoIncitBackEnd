@@ -22,6 +22,10 @@ return [
         'callback' => Controller\ContactController::class . ':contact',
     ],
     [
+        'pattern' => '/isEmailUnique',
+        'callback' => Controller\UserController::class . ':isEmailUnique',
+    ],
+    [
         'pattern' => '/newAccount',
         'callback' => Controller\UserController::class . ':newAccount',
     ],

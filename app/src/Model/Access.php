@@ -31,6 +31,18 @@ class Access
         $this->account = $account;
     }
 
+    // Função na Model para verficar se o e-mail já está atrelado 
+    // à um usuário
+    public function isEmailUnique(
+        $email
+        )
+    {
+        // Verifica se já existe o usuário na tabela, em caso de sucesso uma exceção é lançada
+        if($this->user->getUserId($email)) {
+            throw new Exception('Existe um usuário com esse e-mail.');
+        }
+    }
+
     // Função na Model para criar uma nova conta de usuário
     public function newAccount(
         $name, 
@@ -39,12 +51,7 @@ class Access
         $user_type, 
         $password
         )
-    {
-        // Verifica se já existe o usuário na tabela, em caso de sucesso uma exceção é lançada
-        if($this->user->getUserId($email)) {
-            throw new Exception('Existe um usuário com esse e-mail.');
-        }
-        
+    {    
         // Gera um hash para inserir a senha na tabela de usuário
         $hash = password_hash($password, PASSWORD_DEFAULT);
 

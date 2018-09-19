@@ -21,6 +21,23 @@ class UserController
         $this->access = $access;
         $this->account = $account;
     }
+    // Função na Controller para verficar se o e-mail já está atrelado 
+    // à um usuário
+    public function isEmailUnique($request)
+    {
+        $params = $request->getPostParams();
+        
+        try {
+            $this->access->isEmailUnique( 
+                $params['email']
+            );
+            $rp = new ResponseHandler(200);
+        } catch (Exception $ex) {
+            $rp = new ResponseHandler(400, $ex->getMessage());
+        }
+
+        $rp->printJson();
+    }
 
     // Função na Controller para criar uma nova conta
     public function newAccount($request)
