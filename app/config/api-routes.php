@@ -7,6 +7,7 @@ use IntecPhp\Middleware\AuthenticationMiddleware;
 
 // Arquivo contendo as rotas para funcionalidades do site
 // Funcionalidades existentes:
+//  -   Verificar se e-mail já existe
 //  -   Criar nova conta;
 //  -   Logar na plataforma;
 //  -   Trocar a senha, pelo esqueci minha senha;
@@ -15,7 +16,9 @@ use IntecPhp\Middleware\AuthenticationMiddleware;
 //  -   Remover interesse de empresa;
 //  -   Atualizar arquivo de currículo;
 //  -   Remover currículo de usuário comum;
-//  -   Buscar por meio de uma lista de interesses;
+//  -   Buscar currículo por meio de uma lista de interesses;
+//  -   Buscar interesses de um usuário empresa;
+//  -   Buscar o currículo de um usuário;
 return [
     [
         'pattern' => '/contact',
