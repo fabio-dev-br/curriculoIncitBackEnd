@@ -43,7 +43,7 @@ class UserController
     public function newAccount($request)
     {
         $params = $request->getPostParams();
-        
+
         try {
             $this->access->newAccount(
                 $params['name'], 

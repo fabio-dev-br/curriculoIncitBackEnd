@@ -167,9 +167,9 @@ class CurriculumController
         $id_user = $this->account->get($token, "id");
 
         try {
-            $this->system->removeCurriculum(
-                $id_user
-            );
+            // $this->system->removeCurriculum(
+            //     $id_user
+            // );
             $rp = new ResponseHandler(200);
         } catch (Exception $ex) {
             $rp = new ResponseHandler(400, $ex->getMessage());

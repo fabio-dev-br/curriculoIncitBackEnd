@@ -52,6 +52,11 @@ class Access
         $password
         )
     {    
+        // Verifica se já existe o usuário na tabela, em caso de sucesso uma exceção é lançada
+        if($this->user->getUserId($email)) {
+            throw new Exception('Existe um usuário com esse e-mail.');
+        }
+
         // Gera um hash para inserir a senha na tabela de usuário
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
