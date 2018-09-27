@@ -100,11 +100,15 @@ class System
         // Verifica quais empresas possuem interesses nas habilidades do usuário
         // e seus e-mails são recuperados para um posterior envio
         foreach ($habilities as $hability) {
-            $idUsers[$hability] = $this->interestEntity->getUsersId($hability);        
+            // Se não existirem empresas com interesse na habilidade, nessa iteração ($idUsers = NULL),
+            // pula para a próxima habilidade
+            if(($idUsers = $this->interestEntity->getUsersId($hability)) == NULL){
+                continue;
+            }
 
             // A variável emails é limpa já que é utilizada mais de uma vez no loop
             $emails = NULL;
-            foreach ($idUsers[$hability] as $idUser) {
+            foreach ($idUsers as $idUser) {
                 $emails[] = $this->user->getOnlyEmail($idUser); 
             }            
 
@@ -209,11 +213,15 @@ class System
         // Verifica quais empresas possuem interesses nas habilidades do usuário
         // e seus e-mails são recuperados para um posterior envio
         foreach ($newHabilities as $hability) {
-            $idUsers[$hability] = $this->interestEntity->getUsersId($hability);        
-
+            // Se não existirem empresas com interesse na habilidade, nessa iteração ($idUsers = NULL),
+            // pula para a próxima habilidade
+            if(($idUsers = $this->interestEntity->getUsersId($hability)) == NULL){
+                continue;
+            }
+            
             // A variável emails é limpa já que é utilizada mais de uma vez no loop
             $emails = NULL;
-            foreach ($idUsers[$hability] as $idUser) {
+            foreach ($idUsers as $idUser) {
                 $emails[] = $this->user->getOnlyEmail($idUser); 
             }            
 
