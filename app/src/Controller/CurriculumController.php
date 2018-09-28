@@ -167,9 +167,9 @@ class CurriculumController
         $id_user = $this->account->get($token, "id");
 
         try {
-            // $this->system->removeCurriculum(
-            //     $id_user
-            // );
+            $this->system->removeCurriculum(
+                $id_user
+            );
             $rp = new ResponseHandler(200);
         } catch (Exception $ex) {
             $rp = new ResponseHandler(400, $ex->getMessage());
@@ -229,7 +229,14 @@ class CurriculumController
             $result = $this->system->searchInt(
                 $id_user
             );
-            $rp = new ResponseHandler(200, '', $result);
+            // Verifica se o resultado for false (ou seja, não encontrou nada)
+            // retorna um vetor vazio, caso contrário, retorna os valores 
+            // encontrados
+            if(!$result){
+                $rp = new ResponseHandler(200, '', []);                
+            } else {
+                $rp = new ResponseHandler(200, '', $result);
+            }            
         } catch (Exception $ex) {
             $rp = new ResponseHandler(400, $ex->getMessage());
         }
