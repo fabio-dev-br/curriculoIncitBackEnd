@@ -13,6 +13,7 @@
 
 **Importante**: Como o BrowserSync é executado dentro de um container, o navegador não abrirá sozinho, é necessário clicar na url indicada (interna ou externa)
 
+
 Acesso de linha de comando para mysql, beanstalk e redis
 - `mysql -h 127.0.0.1 -u root -p --port=13306` # mysql (se possuir o mysql instalado em sua máquina, caso contrário, utilize o método de **Informações Gerais**)
 - `telnet 127.0.0.1 21300` # beanstalkd
@@ -21,13 +22,6 @@ Acesso de linha de comando para mysql, beanstalk e redis
 ### Informações Gerais:
 
 - Os containers **phpstart-mysql**, **phpstart-node**, **phpstart-beanstalk**, **phpstart-webserver**, **phpstart** executam enquanto o comando `docker-compose up` estiver ativo ou indefinidamente caso estejam sendo executados como *daemon*. É possível acessá-los para execução de comandos adicionais. Ex:
-
-```sh
-# acessa o container phpstart-node
-docker exec -it phpstart-node sh
-# rodar comandos dentro do container
-npm i vue --save
-```
 
 ```sh
 # atualizar dependências do php
@@ -98,3 +92,12 @@ npm install
     - `grunt build`
 
 **Importante**: Para evitar problemas de caching em navegadores, durante o desenvolvimento, recomenda-se desativar o cache na janela de debug (rede) do navegador.
+
+**Melhorias**:
+
+- Criar sessão do usuario;
+- inserir bem-vindo (nome do usuario);
+- Inserir botão sair ;
+- Melhorar interface;
+- Arrumar funcionalinade de baixar curriculo;
+- 

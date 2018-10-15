@@ -13,7 +13,7 @@ return [
     ],
     'jwt' => [
         'app_secret' => getenv('APP_SECRET'),
-        'token_expires' => 172800 // 2 dias
+        'token_expires' => 1728000 // 2 dias
     ],
     'session' => [
         'cookie_name' => getenv('APP_COOKIE_NAME'),

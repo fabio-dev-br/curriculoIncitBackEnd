@@ -21,21 +21,6 @@ services:
         ports:
             - 21300:11300
 
-    node:
-        image: node:10.6.0-alpine
-        container_name: phpstart-node
-        environment:
-            - SERVERNAME=webserver
-        volumes:
-            - .:/srv/vhosts/phpApp
-        working_dir: /srv/vhosts/phpApp
-        command: /bin/sh -c "npm install grunt-cli && npm install && npm run dev"
-        ports:
-            - 3000:3000
-            - 3001:3001
-        depends_on:
-            - webserver
-
     php-fpm:
         image: marciodojr/phpstart:2.0.0
         container_name: phpstart

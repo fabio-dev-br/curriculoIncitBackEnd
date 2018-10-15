@@ -84,6 +84,7 @@ class Interest extends AbstractEntity
         if($stm) {
             // Variável stms recebe todas as linhas encontradas na tabela interest com interesse fornecido
             $stms = $stm->fetchAll();
+            $usersId = [];
 
             // O vetor usersId receberá todos os IDs de usuários
             foreach ($stms as $userId) {

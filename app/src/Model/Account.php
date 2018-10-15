@@ -19,8 +19,12 @@ class Account
         return $this->jwt->encode($info);
     }
 
-    public function get(string $token, string $key = null)
+    public function get(?string $token, string $key = null)
     {
+        if(!$token) {
+            return false;
+        }
+
         try {
             $data = $this->jwt->decode($token)->data;
             if(is_null($key)) {
