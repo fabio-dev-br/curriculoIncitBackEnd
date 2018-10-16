@@ -100,4 +100,72 @@ npm install
 - Inserir botão sair ;
 - Melhorar interface;
 - Arrumar funcionalinade de baixar curriculo;
-- 
+## Git fuxo
+
+### Subir mudanças
+
+1. git add -A
+2. git commit -m "Adiciona funcionalidade xyz"
+3. git push
+
+### Baixar mudanças
+
+0. git checkout master
+1. git pull
+
+## Gitflow (Vicent)
+
+
+----------------- hotfix1 (md)--
+    /                           \
+----------------- master --------o-----------o (v1.2.10)-
+                                            /
+----------------- dev ---------------o------
+    \                               /
+     ---------- feature1-branch ----
+                                   
+     ---------- feature2-branch ----
+## Semver (semver.org)
+
+## Rodar o Projeto
+
+## Vuejs
+
+Documentação: https://vuejs.org/v2/guide/
+- Vue CLI. 
+
+## Backend
+- PHP: php-fig. --> psr-4 (substitui a psr-0)
+- Docker e devops
+
+Como acessar os containers:
+    
+
+
+
+- Entender o backend --> autenticação via token (JWT token)
+
+ o/ ----------------------> WebServer
+
+
+
+POST /path HTTP/1.1 $_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']
+Host: example.com
+Authorization: Bearer sjudfhwuei3y45y394583y4i5u34i785y8394rth34fh9038y8934534=435834895eoirthj834y65=
+
+foo=bar&baz=bat
+
+- HTTP Basic autentication
+- Bearer token autentication
+
+- Refatorar código
+
+## Evolução do projeto
+- Modelagem
+- Validação
+- Implementação
+
+**Estudar**:
+- Rest;
+- vuex;
+- adr(action domain responder);
