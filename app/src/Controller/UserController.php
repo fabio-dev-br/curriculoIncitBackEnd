@@ -78,7 +78,7 @@ class UserController
             $rp = new ResponseHandler(200, '', [
                 'token' => $token,
                 'user_type' => $result['user_type'],
-                'nome' => 'jose'
+                'nome' => $result['name']
             ]);
         } catch (Exception $ex) {
             $rp = new ResponseHandler(400, $ex->getMessage());

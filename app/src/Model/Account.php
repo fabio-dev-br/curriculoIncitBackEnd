@@ -19,7 +19,7 @@ class Account
         return $this->jwt->encode($info);
     }
 
-    public function get(?string $token, string $key = null)
+    public function get(string $token, string $key = null)
     {
         if(!$token) {
             return false;
@@ -40,6 +40,9 @@ class Account
     // a autenticação é do tipo Bearer ( Authorization: Bearer <token> )
     public function getToken() 
     {
+        // check if the header HTTP_AUTHORIZATION was sent to server
+        // returns the token ex: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9 or void
+        if(isset($_SERVER["HTTP_AUTHORIZATION"]))
         $tokenAux = explode(" ", $_SERVER["HTTP_AUTHORIZATION"]);
         return $tokenAux[1];        
     }

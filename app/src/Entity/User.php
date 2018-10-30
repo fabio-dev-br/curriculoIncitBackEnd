@@ -34,7 +34,7 @@ class User extends AbstractEntity
     // Função que ajuda no login do usuário, em caso de sucesso retorna tipo de usuário e id, caso contrário, retorna false
     public function getInfo($email)
     {
-        $stm = $this->conn->query("select user_type, id from user where email = ?", [
+        $stm = $this->conn->query("select user_type, id, name from user where email = ?", [
             $email
         ]);
 
