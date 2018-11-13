@@ -149,7 +149,7 @@ class CurriculumController
                 $hashFile,
                 $params['habilities']
             );
-            $rp = new ResponseHandler(200);
+            $rp = new ResponseHandler(200, 'ok', $files);
         } catch (Exception $ex) {
             $rp = new ResponseHandler(400, $ex->getMessage());
         }

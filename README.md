@@ -169,3 +169,4 @@ foo=bar&baz=bat
 - Rest;
 - vuex;
 - adr(action domain responder);
+- psr1 e psr2
